@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Thyme and Tunes</title>
+
+        <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    </head>
+
+    <body>
+        <div id="root"></div>
+        <button id="submit">Cook up a Recipe!</button>
+
+        <script>
+            //TODO figure how to split these into files for cleaner look
+            const container = document.getElementById("root");
+            const root = createRoot(container);
+            root.render(<Ingredients />);
+
+            //TODO split file and learn how to get data from react component
+            button = document.getElementById("submit");
+            button.addEventListener("click", () => {
+                //let ingredients = data from react component and turn into JSON;
+
+            fetch("/recipe", {
+                //TODO send get request with ingredients JSON 
+                method: 'GET',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(ingredients),
+            }).then((response) => {
+                //TODO display recipe
+            })
+
+            })
+
+
+        </script>
+    </body>
+</html>
