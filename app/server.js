@@ -1,7 +1,10 @@
 let express = require("express");
+let axios = require("axios");
 let { Pool } = require("pg");
 let bcrypt = require("bcrypt");
 let env = require("../env.json");
+let apiKey = apiFile["api_key"];
+let baseUrl = apiFile["api_url"];
 
 let hostname = "localhost";
 let port = 3000;
@@ -89,7 +92,29 @@ app.post("/signin", (req, res) => {
         });
 });
 
-
+//recipe request handler
+app.get("/recipe", (req, res) => {
+    
+    let zip = req.query.zip;
+    let url = `${baseUrl}?zip=${zip}&appid=${apiKey}`;
+    
+    const options = {
+        method: 'GET',
+        url: 'https://tasty.p.rapidapi.com/recipes/list',
+        params: {from: '0', size: '20', tags: 'under_30_minutes'},
+        headers: {
+          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Host': 'tasty.p.rapidapi.com'
+        }
+      };
+      
+      axios.request(options).then(function (response) {
+          //console.log(response.data);
+          res.json(response.data);
+      }).catch(function (error) {
+          console.error(error);
+      });
+});
 app.listen(port, hostname, () => {
     console.log(`http://${hostname}:${port}`);
 });
