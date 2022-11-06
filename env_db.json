@@ -1,0 +1,7 @@
+{
+	"user": "ENTER YOUR USERNAME",
+	"host": "localhost",
+	"database": "munchlaxatmidnight",
+	"password": "ENTER YOUR PASSWORD",
+	"port": 5432
+}
