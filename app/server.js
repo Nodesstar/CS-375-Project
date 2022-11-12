@@ -25,6 +25,7 @@ let saltRounds = 10;
 app.post("/signup", (req, res) => {
     console.log("body: ",req.body);
     let username = req.body.username;
+    
     let plaintextPassword = req.body.plaintextPassword;
     if (typeof username !== 'string' || typeof plaintextPassword !== 'string' || username.length < 1 || username.length > 25 && plaintextPassword.length < 5 || plaintextPassword.length > 36) {
         res.sendStatus(401);
@@ -61,6 +62,7 @@ app.post("/signup", (req, res) => {
             res.status(500).send();
         });
 });
+
 app.post("/signin", (req, res) => {
     let username = req.body.username;
     let plaintextPassword = req.body.plaintextPassword;
