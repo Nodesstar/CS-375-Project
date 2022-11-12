@@ -2,10 +2,11 @@ let express = require("express");
 let axios = require("axios");
 let { Pool } = require("pg");
 let bcrypt = require("bcrypt");
-let env = require("../env.json");
+let env = require("../env_db.json");
 
 let apiFile = require("../env_api.json");
 let apiKey = apiFile["api_key"];
+let apiID = apiFile["api_id"];
 let baseUrl = apiFile["api_url"];
 
 let hostname = "localhost";
@@ -95,7 +96,7 @@ app.post("/signin", (req, res) => {
 });
 
 //recipe request handler
-app.get("/recipe", (req, res) => {
+app.get("/defunct", (req, res) => {
     
     //let zip = req.query.zip;
     //let url = `${baseUrl}?zip=${zip}&appid=${apiKey}`;
@@ -116,6 +117,18 @@ app.get("/recipe", (req, res) => {
       }).catch(function (error) {
           console.error(error);
       });
+});
+
+app.get("/recipe", (req, res) => {
+    
+    //let zip = req.query.zip;
+    let url = `${baseUrl}?type=public&beta=false&q=chicken&app_id=${apiID}&app_key=${apiKey}&diet=balanced&mealType=Dinner&imageSize=REGULAR&field=uri&field=label&field=image&field=images&field=source&field=url&field=shareAs&field=yield&field=dietLabels&field=healthLabels&field=cautions&field=ingredientLines&field=ingredients&field=calories&field=glycemicIndex&field=totalCO2Emissions&field=co2EmissionsClass&field=totalWeight&field=totalTime&field=cuisineType&field=mealType&field=dishType&field=totalNutrients&field=totalDaily&field=digest&field=tags`;
+   
+
+    axios.get(url).then((response) => {
+        console.log("Received response:", response.data);
+        res.json(response.data);
+    });
 });
 app.listen(port, hostname, () => {
     console.log(`http://${hostname}:${port}`);

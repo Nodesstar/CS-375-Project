@@ -10,7 +10,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "bash ./startup.sh"
+    "start": "bash ./startup.sh",
+    "setdb": "psql --username $USERNAME -f setup.sql"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,5 @@
     "url": "https://github.com/Nodesstar/CS-375-Project/issues"
   },
   "homepage": "https://github.com/Nodesstar/CS-375-Project#readme",
-  "description": ""
+  "description": "To run the program, make sure you input the necessary information in the template JSON files for both env_db.json and env_api.json. Then, type"
 }

@@ -1,5 +1,6 @@
 {
 	
     "api_key": "ENTER API KEY",
-	"api_url":  "ENTER URL"
+	"api_url":  "https://api.edamam.c​​om/api/recipes/v2",
+    "api_id": "ENTER API ID"
 }
