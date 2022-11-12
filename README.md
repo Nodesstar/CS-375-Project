@@ -3,7 +3,9 @@ To run the program, make sure you input the necessary information in the templat
 these commandline commands in sequential order
 
 export USERNAME="TYPE YOUR POSTGRES USERNAME"
+
 npm run setdb
+
 npm start
 
 
