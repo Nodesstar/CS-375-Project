@@ -122,6 +122,14 @@ app.get("/defunct", (req, res) => {
 });
 
 app.get("/recipe", (req, res) => {
+    let ingredients = req.ingredients; 
+    /*
+    let url = baseq=;
+    for (x of ingredients) {
+        url += x;
+    }
+    */
+
     
     //let zip = req.query.zip;
     let url = `${baseUrl}?type=public&beta=false&q=chicken&app_id=${apiID}&app_key=${apiKey}&diet=balanced&mealType=Dinner&imageSize=REGULAR&field=uri&field=label&field=image&field=images&field=source&field=url&field=shareAs&field=yield&field=dietLabels&field=healthLabels&field=cautions&field=ingredientLines&field=ingredients&field=calories&field=glycemicIndex&field=totalCO2Emissions&field=co2EmissionsClass&field=totalWeight&field=totalTime&field=cuisineType&field=mealType&field=dishType&field=totalNutrients&field=totalDaily&field=digest&field=tags`;

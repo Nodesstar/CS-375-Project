@@ -11,42 +11,46 @@
     </head>
 
     <body>
-        <div id="root"></div>
+        <div id="ingredients"></div>
         <button id="submit">Cook up a Recipe!</button>
 
         <script>
-            //TODO figure how to split these into files for cleaner look
-            const container = document.getElementById("root");
-            const root = createRoot(container);
-            root.render(<Ingredients />);
 
             //TODO split file and learn how to get data from react component
             button = document.getElementById("submit");
             button.addEventListener("click", () => {
                 //let ingredients = data from react component and turn into JSON;
+                let ingredients_box = document.getElementById("ingredients");
+                let ingredients_list = [];
+                ingredients_box = ingredients_box.firstChild;
+                ingredients_box = ingredients_box.firstChild;
+                ingredients_box = ingredients_box.childNodes;
+                console.log(ingredients_box);
+                for (let x of ingredients_box) {
+                    if (x.checked) {
+                        ingredients_list.push(x.value);
+                    }
+                }
+                let ingredients = {"ingredients": ingredients_list};
+                console.log(ingredients);
+                fetch("/recipe", {
+                    //TODO send get request with ingredients JSON 
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(ingredients),
 
-            fetch("/recipe", {
-                //TODO send get request with ingredients JSON 
-                method: 'GET',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(ingredients),
-            }).then((response) => {
-                //TODO display recipe
-            })
-            // fetch("/recipe")
-            // .then((response) => {
-            //     response.json()
-            //     .then((body) => {
-            //         console.log(body);
-            //     });
-            // });
-
-            })
-
-
+                }).then((response) => {
+                    console.log(response);
+                });
+            });
         </script>
+        <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script> 
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+        <script src="ingredients.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
     </body>
 
 </html>
