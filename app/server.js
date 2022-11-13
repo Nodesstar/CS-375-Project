@@ -123,20 +123,26 @@ app.get("/defunct", (req, res) => {
 
 app.get("/recipe", (req, res) => {
     let ingredients = req.ingredients; 
-    /*
-    let url = baseq=;
+    let q = "";
     for (x of ingredients) {
-        url += x;
+        q += x + ",";
     }
-    */
+    let url = `${baseUrl}?type=public&beta=false&q=${q}&app_id=${apiID}&app_key=${apiKey}`;
 
-    
     //let zip = req.query.zip;
-    let url = `${baseUrl}?type=public&beta=false&q=chicken&app_id=${apiID}&app_key=${apiKey}&diet=balanced&mealType=Dinner&imageSize=REGULAR&field=uri&field=label&field=image&field=images&field=source&field=url&field=shareAs&field=yield&field=dietLabels&field=healthLabels&field=cautions&field=ingredientLines&field=ingredients&field=calories&field=glycemicIndex&field=totalCO2Emissions&field=co2EmissionsClass&field=totalWeight&field=totalTime&field=cuisineType&field=mealType&field=dishType&field=totalNutrients&field=totalDaily&field=digest&field=tags`;
+
+
+    //&diet=balanced&mealType=Dinner&imageSize=REGULAR&field=uri&field=label&field=image&field=images&field=source&field=url&field=shareAs&field=yield&field=dietLabels&field=healthLabels&field=cautions&field=ingredientLines&field=ingredients&field=calories&field=glycemicIndex&field=totalCO2Emissions&field=co2EmissionsClass&field=totalWeight&field=totalTime&field=cuisineType&field=mealType&field=dishType&field=totalNutrients&field=totalDaily&field=digest&field=tags`;
    
 
     axios.get(url).then((response) => {
         console.log("Received response:", response.data);
+        let response_ingredients = response.data.hits[0].recipe.ingredients;
+        let required_ingredients = [];
+        for (let name of response_ingredients) {
+            required_ingredients.push(name.food);
+        }
+        //TODO split into two list: what the user has and what the user doesn't have
         res.json(response.data);
     });
 });
