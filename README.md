@@ -2,10 +2,15 @@
 To run the program, make sure you input the necessary information (from email or bblearn assignment comments) in the template JSON files for both env_db.json and env_api.json. Additionally, make sure you have postgress installed and running. Then, type 
 these commandline commands in sequential order
 
-export USERNAME="TYPE YOUR POSTGRES USERNAME"
+For MacOS, write:
+**export USERNAME="TYPE YOUR POSTGRES USERNAME"**
 
-npm run setdb
+For Linux/Windows, write:
+**set USERNAME="TYPE YOUR POSTGRES USERNAME"**
 
-npm start
+Then,
+**npm run setdb**
+
+**npm start**
 
 
