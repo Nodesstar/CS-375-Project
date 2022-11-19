@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shopping List</title>
+<style>
+.error {
+	color: red;
+}
+</style>
+</head>
+<body>
+
+    <nav>
+      
+        <a href = "./index.html">Home</a>
+            <a href = "./login.html">Login</a>
+            <a href = "./rec.html">Get Recommendations</a>
+            <a href = "./pantry.html">Pantry</a>
+            <a href = "./shopping.html">Shopping List</a>
+            <a href = "./recipebook.html">Recipe Book</a>
+        
+     </nav>
+     
+
+
+     <button id="shopping-list">
+        View Shopping List
+    </button>
+    <div> 
+        <ul id="display"> 
+
+        </ul>
+    </div>
+<script>
+
+let shopping_btn = document.getElementById("shopping-list");
+let display = document.getElementById("display");
+
+shopping_btn.addEventListener("click", () => {
+    let q_input = "vietnamese";
+    let meal_input = "Dinner";
+    let q_string = `/recipe?search=${q_input}&mealtype=${meal_input}`;
+    fetch(q_string)
+    .then((response) => {
+        response.json()
+        .then((body) => {
+            let another_q = ``;
+            let n = body.hits[0].recipe.ingredients.length;
+            console.log("ingred", body.hits[0].recipe.ingredients);
+            for (let i = 0; i < n; i++)
+            {
+                let item = body.hits[0].recipe.ingredients[i].food.toLowerCase();
+                another_q += `${item},`
+            }
+            console.log("another_q", another_q);
+            fetch(`/shopping?compare=${another_q}`)
+            .then((response) => {
+                response.json()
+                .then((body) => {
+                    let hits = body.rows;
+                    console.log(hits);
+                    let all_items = another_q.split(",");
+                    console.log(all_items);
+                    all_items.pop();
+                    console.log(all_items);
+                   
+                    
+                    for (let i = 0; i < hits.length; i++)
+                    {
+                        let remove_idx = all_items.indexOf(hits[i].item_name);
+                        all_items.splice(remove_idx,1);
+                    }
+                    
+                    for (let i = 0; i < all_items.length; i++)
+                    {
+                        let li = document.createElement("li");
+                        display.append(li);
+                        li.textContent = all_items[i];
+                    }
+                    
+                    
+                });
+            });
+            
+        });
+    });
+    
+});
+
+
+</script>
+
+</body>
+</html>

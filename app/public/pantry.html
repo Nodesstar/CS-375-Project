@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Pantry</title>
+<style>
+
+</style>
+</head>
+<body>
+
+    <nav>
+      
+        <a href = "./index.html">Home</a>
+            <a href = "./login.html">Login</a>
+            <a href = "./rec.html">Get Recommendations</a>
+            <a href = "./pantry.html">Pantry</a>
+            <a href = "./shopping.html">Shopping List</a>
+            <a href = "./recipebook.html">Recipe Book</a>
+        
+     </nav>
+     
+     <div> 
+        <label for="item">Item Name:</label>
+        <input id="item" type="text" />
+     </div>
+
+     <button id="add-line">
+        Add
+    </button>
+
+    <h2>
+        Pantry List
+    </h2>
+
+    <div id="pantry-list">
+        <ul id="start">
+
+        </ul>
+
+    </div>
+
+    <button id="save-btn">
+        Save
+    </button>
+
+    <button id="view-btn">
+        View Pantry List
+    </button>
+
+    <div> 
+        <ul id="view-pantry">
+
+        </ul>
+    </div>
+
+    
+
+
+
+
+<script>
+
+let pantry = document.getElementById("pantry-list");
+let btn = document.getElementById("add-line");
+let list = document.getElementById("start");
+let item_box = document.getElementById("item");
+let save_btn = document.getElementById("save-btn");
+let view_btn = document.getElementById("view-btn");
+let pantry_ul = document.getElementById("view-pantry");
+
+btn.addEventListener("click", () => {
+    let li = document.createElement("li");
+    list.append(li);
+
+    li.textContent = item_box.value;
+});
+
+save_btn.addEventListener("click", () => {
+    let n_items = list.children.length;
+  
+    let pantry_str = "";
+
+    for (let i = 0; i < n_items; i++)
+    {
+        pantry_str += `${list.children[i].textContent},`;
+    }
+    
+    let q_string = `/pantry?${pantry_str}`;
+
+    fetch("/pantry", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+        
+		body: JSON.stringify({
+			items: pantry_str
+		})
+
+
+    })
+    .then((response) => {
+        console.log("good");
+    });
+
+    while (list.children.length)
+    {
+        list.lastElementChild.remove();
+    }
+
+});
+
+view_btn.addEventListener("click", () => {
+    fetch("/viewpantrylist")
+    .then((response) => {
+        response.json()
+        .then((body) => {
+            
+            console.log(pantry_ul.children.length);
+            while (pantry_ul.children.length)
+            {
+                
+                pantry_ul.lastElementChild.remove();
+            }
+
+            for (let i = 0; i < body.rows.length; i++)
+            {
+                
+                let li = document.createElement("li");
+                pantry_ul.append(li);
+                li.textContent = body.rows[i].item_name;
+            }
+            
+        });
+    });
+});
+</script>
+
+</body>
+</html>
