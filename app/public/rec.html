@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="utf-8" />
+    <title>Recipe</title>
+
+    <style>
+        td {
+             border-collapse: collapse;
+             border: 1px solid black;
+             padding: 10px;
+         }
+     </style>
+</head>
+
+<body>
+    <div class='page-links'>
+        <nav>
+      
+            <a href = "./index.html">Home</a>
+            <a href = "./login.html">Login</a>
+            <a href = "./rec.html">Get Recommendations</a>
+            <a href = "./pantry.html">Pantry</a>
+            <a href = "./shopping.html">Shopping List</a>
+            <a href = "./recipebook.html">Recipe Book</a>
+            
+         </nav>
+    </div>
+
+    <div id="info">
+
+    </div>
+    
+    <div>
+        <label for="query">Search:</label>
+        <input id="query" type="text" />
+    </div>
+
+    <div>
+        <label for="meal-type">Meal Type:</label>
+        <select name="meal-type" id="meal-select">
+            <option value="">Please select a meal type</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Snack">Snack</option>
+            
+        </select>
+    </div>
+
+    <div>
+        <label for="folder-name">Folder Name:</label>
+        <select name="folder-name" id="folder-name">
+            <option value="">Please select a folder</option>
+            <option value="To Be Cooked">To Be Cooked</option>
+            <option value="Liked">Liked</option>
+           
+        </select>
+    </div>
+
+    <button id="send">Recipe</button>
+    <button id="saverecipe-btn">Save to Recipe Book</button>
+
+    <table id="data-table"> 
+        <thead>
+            <tr>
+                <td style="font-weight: bold;">
+                    Recipe Name
+                </td>
+                <td style="font-weight: bold;">
+                    Instructions
+                </td>
+                <td style="font-weight: bold;">
+                    Calories
+                </td>
+                <td style="font-weight: bold;">
+                    Image
+                </td>
+            </tr>
+        </thead>
+        
+    </table>
+    
+    <script>
+
+        let query_input = document.getElementById("query");
+        let mealtype_input = document.getElementById("meal-select");
+        let btn = document.getElementById("send");
+        let table = document.getElementById("data-table");
+        let folder_name = document.getElementById("folder-name");
+
+        let tbody = document.createElement("tbody");
+        tbody.id = "t-body";
+        table.append(tbody);
+        let start_tbody = document.getElementById("t-body");
+        
+
+        table.style.border = '1px solid black';
+        table.style.borderCollapse = 'collapse';
+        table.style.padding = '3px';
+        table.style.tableLayout = 'fixed';
+
+        btn.addEventListener("click", () => {
+            let q_input = query_input.value;
+            let meal_input = mealtype_input.value;
+            let q_string = `/recipe?search=${q_input}&mealtype=${meal_input}`;
+
+            fetch(q_string)
+            .then((response) => {
+                response.json()
+                .then((body) => {
+                    console.log(body);
+                    let alt_body = body;
+                    //document.getElementById("info").textContent = body.hits[0].recipe.calories;
+
+                    let rows = Object.keys(body.hits).length;
+                    console.log(rows);
+
+                    if (tbody.hasChildNodes())
+                    {   
+                        for (let i = tbody.children.length - 1; i >= 0; i--)
+                        {
+                        
+                            tbody.children[i].remove();
+                
+                        }
+                        
+                    }
+
+                    for (let i = 0; i < rows; i++)
+                    {
+                        let tr = document.createElement('tr');
+
+                        tbody.append(tr);
+                        let td1 = document.createElement('td');
+                        tr.append(td1);
+                        td1.textContent = body.hits[i].recipe.label;
+                        let td2 = document.createElement('td');
+                        tr.append(td2);
+                        let ingr_rows = body.hits[i].recipe.ingredientLines.length;
+
+                        let ul = document.createElement('ul');
+                        td2.append(ul);
+                        for (let j = 0; j < ingr_rows; j++)
+                        {
+                            let li = document.createElement('li');
+                            ul.append(li);
+                            li.textContent = body.hits[i].recipe.ingredientLines[j];
+                            
+                        }
+                        
+                        let td3 = document.createElement('td');
+                        tr.append(td3);
+                        td3.textContent = body.hits[i].recipe.calories;
+                        let td4 = document.createElement('td');
+                        tr.append(td4);
+                        food_img = document.createElement('img');
+                        td4.append(food_img);
+                        food_img.src = body.hits[i].recipe.image;
+                        
+                        td4 = document.createElement('td');
+                        tr.append(td4);
+
+                        let save_cb = document.createElement('input');
+                        
+                        save_cb.type = "checkbox";
+                        save_cb.class = "saverecipe";
+                        save_cb.name = "saverecipe";
+                        td4.append(save_cb);
+
+
+                        
+                    }
+
+                    let cb = document.getElementsByName("saverecipe");
+                    let save_btn = document.getElementById("saverecipe-btn");
+
+                    save_btn.addEventListener("click", () => {
+                        for (let i = 0; i < cb.length; i++)
+                        {
+                            if (cb[i].checked)
+                            {
+                                console.log(folder_name.value);
+                                fetch("/saverecipe", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    
+                                    body: JSON.stringify({
+                                        recipe: alt_body.hits[i].recipe,
+                                        folder_name: folder_name.value
+                                    })
+
+
+                                })
+                                .then((response) => {
+                                    response.text()
+                                    .then((body) => {
+                                        console.log("success");
+                                    })
+                                });
+                            }
+                        }
+                        
+                    });
+                });
+            });
+        });
+
+        
+        
+    </script>
+</body>
+
+</html>
