@@ -5,7 +5,7 @@ let app = express();
 app.use(express.static("public"));
 app.use(express.json());
 
-let apiFile = require("../env.json");
+let apiFile = require("../env_api.json");
 let apiKey = apiFile["api_key"];
 let apiID = apiFile["api_id"];
 let baseUrl = apiFile["api_url"]; 
