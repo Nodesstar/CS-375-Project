@@ -61,6 +61,10 @@
 
     <button id="send">Recipe</button>
     <button id="saverecipe-btn">Save to Recipe Book</button>
+    <label for="healthfilter">Choose a dietary filter:</label>
+    <select name="healthfilter" id="HealthFilter">
+        <option value="vegetarian">Vegetarian</option>
+    </select>
 
     <table id="data-table"> 
         <thead>
@@ -81,6 +85,8 @@
         </thead>
         
     </table>
+
+    <script src="functions.js"></script>
     
     <script>
 
@@ -126,6 +132,12 @@
                 
                         }
                         
+                    }
+
+                    //filters if filter is selected
+                    let filter = document.getElementById("HealthFilter").value;
+                    if (filter === "vegetarian") {
+                        let rec_recipes = filter(body.hits, "vegetarian");
                     }
 
                     for (let i = 0; i < rows; i++)

@@ -11,6 +11,7 @@ function filter(recipes, filter) {
             }
         }
     }
+    return filtered;
 }
 
 //calculates how many more ingredients are needed compared to what is in the pantry
