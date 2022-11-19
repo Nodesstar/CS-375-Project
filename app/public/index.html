@@ -44,7 +44,6 @@
                 ingredients_box = ingredients_box.firstChild;
                 ingredients_box = ingredients_box.firstChild;
                 ingredients_box = ingredients_box.childNodes;
-                console.log(ingredients_box);
                 for (let x of ingredients_box) {
                     if (x.checked) {
                         ingredients_list.push(x.value);
@@ -53,7 +52,7 @@
                 let ingredients = {"ingredients": ingredients_list};
                 console.log(ingredients);
                 fetch("/recipe", {
-                    //TODO send get request with ingredients JSON 
+                    //TODO integrate Avery's dietary restrictions into the fetch
                     method: 'GET',
                     headers: {
                     'Content-Type': 'application/json',
