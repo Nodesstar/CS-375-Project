@@ -3,9 +3,11 @@ To run the program, make sure you input the necessary information (from email or
 these commandline commands in sequential order
 
 For MacOS, write:
+
 **export USERNAME="TYPE YOUR POSTGRES USERNAME"**
 
 For Linux/Windows, write:
+
 **set USERNAME="TYPE YOUR POSTGRES USERNAME"**
 
 Then,
