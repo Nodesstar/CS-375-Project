@@ -1,2 +1,4 @@
 env.json
 node_modules
+env_db.json
+env_api.json
