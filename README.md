@@ -9,6 +9,7 @@ For Linux/Windows, write:
 **set USERNAME="TYPE YOUR POSTGRES USERNAME"**
 
 Then,
+
 **npm run setdb**
 
 **npm start**
