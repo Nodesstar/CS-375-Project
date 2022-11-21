@@ -20,9 +20,14 @@
         
      </nav>
      
-     <div> 
-        <label for="item">Item Name:</label>
-        <input id="item" type="text" />
+     <div class="dropdown"> 
+     <label for="item">Item Name:</label>
+     		<div id="myDropdown" class="dropdown-content">
+			<input type="text" placeholder="Search.." id="item" onkeyup="filterFunction()">
+    			<select name="ingredients" id="ingredients">
+    				
+			</select>
+  		</div>
      </div>
 
      <button id="add-line">
@@ -32,6 +37,8 @@
     <h2>
         Pantry List
     </h2>
+
+    <div id="err"></div>
 
     <div id="pantry-list">
         <ul id="start">
@@ -54,64 +61,119 @@
         </ul>
     </div>
 
-    
-
-
-
-
 <script>
+
+function filterFunction() {
+  let input, filter, a, i;
+  input = document.getElementById("item");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("myDropdown");
+  options = div.getElementsByTagName("option");
+  for (i = 0; i < options.length; i++) {
+    txtValue = options[i].textContent || options[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      options[i].style.display = "";
+    } else {
+      options[i].style.display = "none";
+    }
+  }
+} 
 
 let pantry = document.getElementById("pantry-list");
 let btn = document.getElementById("add-line");
 let list = document.getElementById("start");
-let item_box = document.getElementById("item");
+let ingredient = document.getElementById("ingredients");
 let save_btn = document.getElementById("save-btn");
 let view_btn = document.getElementById("view-btn");
 let pantry_ul = document.getElementById("view-pantry");
+let err = document.getElementById("err");
 
 btn.addEventListener("click", () => {
-    let li = document.createElement("li");
-    list.append(li);
+   	let li = document.createElement("li");
+	let found = false;
 
-    li.textContent = item_box.value;
+    	for (let element of list.children) {
+		if (element.textContent == ingredient.value) {
+			found = true;
+			break;
+		}
+   	}
+	if (found) {
+		err.textContent = "Item already in list";
+	} else {
+		err.textContent = "";
+		list.append(li);
+    		li.textContent = ingredient.value;
+	}
+});
+
+fetch("/ingredients")
+.then((response) => {
+	return response.json();
+}).then((data) => {
+	let ing = document.getElementById("ingredients");
+
+	for (let meal of data.meals) {
+		let option = document.createElement("option");
+		option.value = meal.strIngredient;
+		option.textContent = meal.strIngredient;
+
+		ing.appendChild(option);
+	}
 });
 
 save_btn.addEventListener("click", () => {
-    let n_items = list.children.length;
+    	let n_items = list.children.length;
+	let found = false;
   
-    let pantry_str = "";
+    	let pantry_str = "";
+	err.textContent = "";
 
-    for (let i = 0; i < n_items; i++)
-    {
-        pantry_str += `${list.children[i].textContent},`;
-    }
-    
-    let q_string = `/pantry?${pantry_str}`;
+    	fetch("/viewpantrylist")
+    	.then((response) => {
+        	return response.json()
+        	.then((body) => {
+			console.log(list.children);
+            		for (let item of list.children) {
+				for (let pantryItem of body.rows) {
+					if (item.textContent === pantryItem.item_name) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					pantry_str += `${item.textContent},`;
+				}
+				found = false;
+			}
 
-    fetch("/pantry", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
+			let q_string = `/pantry?${pantry_str}`;
+
+    			fetch("/pantry", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
         
-		body: JSON.stringify({
-			items: pantry_str
-		})
+				body: JSON.stringify({
+					items: pantry_str
+				})
+			})
+    			.then((response) => {
+        			console.log("good");
+    			});
 
-
-    })
-    .then((response) => {
-        console.log("good");
-    });
-
-    while (list.children.length)
-    {
-        list.lastElementChild.remove();
-    }
-
+    			while (list.children.length)
+    			{
+        			list.lastElementChild.remove();
+    			}
+        	});
+    	});
 });
 
 view_btn.addEventListener("click", () => {
+    err.textContent = "";
+
     fetch("/viewpantrylist")
     .then((response) => {
         response.json()

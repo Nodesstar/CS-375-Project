@@ -24,17 +24,31 @@ let hostname = "localhost";
 app.get("/recipe", (req,res) => {
     //let url = `${baseUrl}?api_id=${apiID}&api_key=${apiKey}&q=chicken`;
     //let url= 'https://api.edamam.com/api/recipes/v2?type=public&beta=false&q=chicken&app_id=26492307&app_key=85a7c28e6d4af555ba4231133767fed9&diet=balanced&mealType=Dinner&imageSize=REGULAR&field=uri&field=label&field=image&field=images&field=source&field=url&field=shareAs&field=yield&field=dietLabels&field=healthLabels&field=cautions&field=ingredientLines&field=ingredients&field=calories&field=glycemicIndex&field=totalCO2Emissions&field=co2EmissionsClass&field=totalWeight&field=totalTime&field=cuisineType&field=mealType&field=dishType&field=totalNutrients&field=totalDaily&field=digest&field=tags';
-    let q_value = req.query.search;
-    let meal_value = req.query.mealtype;
+    	let q_value = req.query.search;
+    	let meal_value = req.query.mealtype;
     
-    let url= `${baseUrl}?type=public&q=${q_value}&app_id=${apiID}&app_key=${apiKey}&mealType=${meal_value}&exclude=desserts`;
-    console.log(q_value, meal_value, url);
+    	let url= `${baseUrl}?type=public&q=${q_value}&app_id=${apiID}&app_key=${apiKey}&mealType=${meal_value}&exclude=desserts`;
 
-    axios.get(url)
-    .then((response) => {
-        //console.log("Received response: ", response.data);
-        res.json(response.data);
-    });
+    	axios.get(url)
+    	.then((response) => {
+		let link = response.data._links.next.href;
+
+		//AVERY 11/20/2022
+		axios.get(link)
+		.then((response2) => {
+			res.json({ data1: response.data, data2: response2.data });
+		});
+    	});
+});
+
+//AVERY 11/20/2022 - Grabs ingredient list from API
+app.get("/ingredients", (req,res) => {
+	let url = "https://www.themealdb.com/api/json/v1/1/list.php?i=list";
+
+	axios.get(url)
+	.then((response) => {
+		res.json(response.data);
+	});
 });
 
 app.post('/pantry', (req,res) => {
@@ -51,14 +65,7 @@ app.post('/pantry', (req,res) => {
             `INSERT INTO pantry(item_name, have_status) VALUES($1, $2)`,
             [item_name, true]
         )
-
-        
     }
-
-    
-    
-
-
 });
 
 app.get("/viewpantrylist", (req,res) => {
