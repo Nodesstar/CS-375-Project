@@ -64,7 +64,17 @@
     <label for="healthfilter">Choose a dietary filter:</label>
     <select name="healthfilter" id="HealthFilter">
         <option value="none">None</option>
-        <option value="vegetarian">Vegetarian</option>
+        <option value="alcohol-free">Alcohol Free</option>
+        <option value="dairy-free">Dairy Free</option>
+        <option value="crustacean-free">Crustacean Free</option>
+        <option value="gluten-free">Gluten Free</option>
+        <option value="keto-friendly">Keto Friendly</option>
+        <option value="kosher">Kosher</option>
+        <option value="vegan">Vegan</option>
+        <option value="tree-nut-free">Tree Nut Free</option>
+        <option value="paleo">Paleo</option>
+        <option value="peanut-free">Peanut Free</option>
+
 
     </select>
 
@@ -104,7 +114,6 @@
         function healthfilter(recipes, filter) {
             let filtered = [];
             for (let recipe of recipes) {
-                console.log(recipe);
                 let labels = recipe.recipe.healthLabels;
                 for (let label of labels) {
                     if (label === filter) {
@@ -207,10 +216,8 @@
 
             //filters if filter is selected
              let filter = document.getElementById("HealthFilter").value;
-             console.log(recipes);
-             console.log(filter);
-            if (filter === "vegetarian") {
-            	recipes = healthfilter(recipes, "Vegetarian");
+            if (filter !== "none") {
+            	recipes = healthfilter(recipes, filter);
             } 
 
             for (let i = 0; i < rows; i++) {
