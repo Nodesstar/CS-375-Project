@@ -43,12 +43,40 @@ app.get("/recipe", (req,res) => {
 
 //AVERY 11/20/2022 - Grabs ingredient list from API
 app.get("/ingredients", (req,res) => {
-	let url = "https://www.themealdb.com/api/json/v1/1/list.php?i=list";
+	pool.query("SELECT * FROM ingredients")
+      .then((result) => {
+            return res.json(result);  
+     	})
+});
+
+app.get("/test", (req,res) => {
+	let vals = ["coi", "er", "whip", "dough", "gh", "po", "ool", "lik", "ji", "pl", "tr"];
+	
+	for (let val = 0; val < vals.length; vals++) {	
+
+	let url = `${baseUrl}?type=public&q=${vals[val]}&app_id=${apiID}&app_key=${apiKey}&mealType=Lunch&exclude=desserts`;
 
 	axios.get(url)
 	.then((response) => {
-		res.json(response.data);
+		let hits = response.data.hits;
+		for (let i = 0; i < hits.length; i++) {
+			for (let j = 0; j < hits[i].recipe.ingredients.length; j++) {
+			pool.query(
+            	`INSERT INTO ingredients(item_name) 
+				SELECT  $1
+				WHERE   NOT EXISTS 
+        				(   	SELECT  1
+        		    			FROM    ingredients 
+          		  			WHERE   item_name = $1 
+        				);`,
+            		[hits[i].recipe.ingredients[j].food.toLowerCase()]
+        		)
+			}
+		}
+		
 	});
+
+	}
 });
 
 app.post('/pantry', (req,res) => {
@@ -72,10 +100,10 @@ app.get("/viewpantrylist", (req,res) => {
     pool.query("SELECT * FROM pantry")
         .then((result) => {
             //console.log(result);
-            for (let i = 0; i < result.rows.length; i++)
+            /*for (let i = 0; i < result.rows.length; i++)
             {
                 console.log(result.rows[i]);
-            }
+            }*/
             return res.json(result);
             
         })

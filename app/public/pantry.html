@@ -79,6 +79,10 @@ function filterFunction() {
   }
 } 
 
+function capitalizeFirstLetter(string) {
+  	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 let pantry = document.getElementById("pantry-list");
 let btn = document.getElementById("add-line");
 let list = document.getElementById("start");
@@ -113,10 +117,10 @@ fetch("/ingredients")
 }).then((data) => {
 	let ing = document.getElementById("ingredients");
 
-	for (let meal of data.meals) {
+	for (let meal of data.rows) {
 		let option = document.createElement("option");
-		option.value = meal.strIngredient;
-		option.textContent = meal.strIngredient;
+		option.value = capitalizeFirstLetter(meal.item_name);
+		option.textContent = capitalizeFirstLetter(meal.item_name);
 
 		ing.appendChild(option);
 	}

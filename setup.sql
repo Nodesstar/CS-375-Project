@@ -15,5 +15,9 @@ CREATE TABLE recipebook(
     folder_name VARCHAR(50),
     rating INT
 );
+CREATE TABLE ingredients(
+    id SERIAL PRIMARY KEY,
+    item_name TEXT
+);
 
 
