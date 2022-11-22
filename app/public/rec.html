@@ -12,6 +12,7 @@
              padding: 10px;
          }
      </style>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
@@ -28,6 +29,8 @@
          </nav>
     </div>
 
+<div id="main"> 
+	<h1 class="page-title">Get Meal Recommendations</h1>
     <div id="info">
 
     </div>
@@ -74,7 +77,7 @@
 
     <div id="err"></div>
 
-    <table id="data-table"> 
+    <table id="data-table" style="text-align: center"> 
         <thead>
             <tr>
                 <td style="font-weight: bold;">
@@ -89,13 +92,17 @@
                 <td style="font-weight: bold;">
                     Image
                 </td>
+		    <td style="font-weight: bold;">
+			  Save Recipe
+		    </td>
             </tr>
         </thead>
         
     </table>
 
+
     <script src="functions.js"></script>
-    
+</div> 
     <script>
 
         //recipe.health label
