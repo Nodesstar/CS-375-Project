@@ -26,6 +26,15 @@ app.get("/recipe", (req,res) => {
     //let url= 'https://api.edamam.com/api/recipes/v2?type=public&beta=false&q=chicken&app_id=26492307&app_key=85a7c28e6d4af555ba4231133767fed9&diet=balanced&mealType=Dinner&imageSize=REGULAR&field=uri&field=label&field=image&field=images&field=source&field=url&field=shareAs&field=yield&field=dietLabels&field=healthLabels&field=cautions&field=ingredientLines&field=ingredients&field=calories&field=glycemicIndex&field=totalCO2Emissions&field=co2EmissionsClass&field=totalWeight&field=totalTime&field=cuisineType&field=mealType&field=dishType&field=totalNutrients&field=totalDaily&field=digest&field=tags';
     	let q_value = req.query.search;
     	let meal_value = req.query.mealtype;
+
+	if (q_value.length == 0) {
+		res.status(400);
+		return res.json({ err: "Please enter a valid search query" });
+	}
+	if (meal_value.length == 0) {
+		res.status(400);
+		return res.json({ err: "Please select a meal type" });
+	}
     
     	let url= `${baseUrl}?type=public&q=${q_value}&app_id=${apiID}&app_key=${apiKey}&mealType=${meal_value}&exclude=desserts`;
 
@@ -37,6 +46,8 @@ app.get("/recipe", (req,res) => {
 		axios.get(link)
 		.then((response2) => {
 			res.json({ data1: response.data, data2: response2.data });
+		}).catch((error) => {
+			res.json({ err: error });
 		});
     	});
 });

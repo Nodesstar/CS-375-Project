@@ -6,11 +6,7 @@
     <title>Recipe</title>
 
     <style>
-        td {
-             border-collapse: collapse;
-             border: 1px solid black;
-             padding: 10px;
-         }
+        
      </style>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -34,7 +30,7 @@
     <div id="info">
 
     </div>
-    
+    <div id="err"></div>
     <div>
         <label for="query">Search:</label>
         <input id="query" type="text" />
@@ -87,30 +83,32 @@
     </label>
     </div>
 
-    <div id="err"></div>
-
     <table id="data-table" style="text-align: center"> 
         <thead>
             <tr>
-                <td style="font-weight: bold;">
+                <td style="font-weight: bold; width: 232.483px;">
                     Recipe Name
                 </td>
-                <td style="font-weight: bold;">
+                <td style="font-weight: bold; width: 526.7px;">
                     Ingredients
                 </td>
-                <td style="font-weight: bold;">
+                <td style="font-weight: bold; width: 75.8333px;">
                     Calories
                 </td>
-                <td style="font-weight: bold;">
+                <td style="font-weight: bold; width: 320.667px;">
                     Image
                 </td>
-		    <td style="font-weight: bold;">
+		    <td style="font-weight: bold; width: 83.65px;">
 			  Save Recipe
 		    </td>
             </tr>
         </thead>
         
     </table>
+
+	<div class="footer">
+  		<p>Sujoy Bose, Avery Deemer, Kevin Hang, Chris Li, Adam Sao - 2022</p>
+	</div>
 
 
     <script src="functions.js"></script>
@@ -205,7 +203,7 @@
 	  function func(ingredientFilter) {
 		let results = 0;
 
-		err.textContent = "";
+		err.textContent = " ";
 
 		//AVERY 11/20/2022
             let recipes = body.data1.hits.concat(body.data2.hits);
@@ -288,12 +286,16 @@
             .then((response) => {
             	return response.json()
             }).then((data) => {
-			body = data;
+			if (data.err != null) {
+				err.textContent = data.err;
+			} else {
+				body = data;
 			
-			if (ingredientFilter.checked)
-				func(true);
-			else
-				func(false);
+				if (ingredientFilter.checked)
+					func(true);
+				else
+					func(false);
+			}
 		});
 	  });
 

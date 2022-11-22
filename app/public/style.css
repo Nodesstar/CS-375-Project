@@ -27,7 +27,7 @@ nav a:hover {
 #main {
 	margin-top: 80px;
 	margin-left: 20px;
-	margin-bottom: 20px;
+	margin-bottom: 77px;
 	margin-right: 20px;
 	text-align: center;
 	font-family: Garamond, serif;
@@ -39,7 +39,15 @@ body {
 }
 
 table {
+	margin-top: 10px;
 	background: white;
+	box-shadow: 0 0 2px 0 black;
+}
+
+td {
+      border-collapse: collapse;
+      border: 1px solid #224f5e;
+      padding: 10px;
 }
 
 .page-title {
@@ -47,4 +55,27 @@ table {
 	text-shadow: 1px 1px 2px pink;
 	color: #224f5e;
 	-webkit-text-stroke: 0.5px #69b5cf;
+}
+
+div #err {
+	font-size: 16px;
+	color: red;
+	text-shadow: 0.3px 0.3px 0.8px black;
+}
+
+.footer {
+	font-size: 18px;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #d7eef5;
+	color: white;
+	text-align: center;
+	z-index: 10;
+	box-shadow: 0 0 1.5px 0 black;
+}
+
+img {
+	box-shadow: 0 0 2px 0 black;
 }
