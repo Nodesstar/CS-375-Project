@@ -41,13 +41,17 @@ body {
 table {
 	margin-top: 10px;
 	background: white;
-	box-shadow: 0 0 2px 0 black;
+	//box-shadow: 0 0 2px 0 black;
 }
 
 td {
       border-collapse: collapse;
-      border: 1px solid #224f5e;
+      //border: 1px solid #224f5e;
       padding: 10px;
+}
+
+tr:nth-of-type(odd) {
+	background: #d2d5d6;
 }
 
 .page-title {
@@ -77,5 +81,5 @@ div #err {
 }
 
 img {
-	box-shadow: 0 0 2px 0 black;
+	box-shadow: 5px 5px 2px 0 black;
 }
