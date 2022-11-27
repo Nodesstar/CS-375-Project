@@ -31,9 +31,6 @@
     				
 			</select>
 			<input type="text" placeholder="Search.." id="item" onkeyup="filterFunction()">
-			<button id="add-line">
-        			Add
-    			</button>
   		</div>
      </div>
 
@@ -44,9 +41,10 @@
     <div id="err"></div>
 
     <div id="pantry-list">
-        <ul id="start">
+	  
+        <div id="start" style="margin-bottom: 10px;">
 
-        </ul>
+        </div>
 
     </div>
 
@@ -93,7 +91,6 @@ function capitalizeFirstLetter(string) {
 }
 
 let pantry = document.getElementById("pantry-list");
-let btn = document.getElementById("add-line");
 let list = document.getElementById("start");
 let ingredient = document.getElementById("ingredients");
 let save_btn = document.getElementById("save-btn");
@@ -101,24 +98,35 @@ let view_btn = document.getElementById("view-btn");
 let pantry_ul = document.getElementById("view-pantry");
 let err = document.getElementById("err");
 
-btn.addEventListener("click", () => {
-   	let li = document.createElement("li");
-	let found = false;
+function addItem() {
 
     	for (let element of list.children) {
 		if (element.textContent == ingredient.value) {
-			found = true;
-			break;
+			err.textContent = "Item already in list";
+			return;
 		}
    	}
-	if (found) {
-		err.textContent = "Item already in list";
-	} else {
-		err.textContent = "";
-		list.append(li);
-    		li.textContent = ingredient.value;
-	}
-});
+	let item = document.createElement("div");
+	let img = document.createElement("img");
+
+	err.textContent = "";
+
+	img.src = "red_x.png";
+	img.width = "15";
+	img.height = "15";
+	img.style.cursor = "pointer";
+	img.title = "Remove from List";
+
+	img.addEventListener("click", () => {
+		img.parentElement.remove();
+	});
+	
+	item.textContent = ingredient.value + "  ";
+	item.classList.add("item_list");
+
+	item.append(img);
+	list.append(item);
+}
 
 fetch("/ingredients")
 .then((response) => {
@@ -130,6 +138,8 @@ fetch("/ingredients")
 		let option = document.createElement("option");
 		option.value = capitalizeFirstLetter(meal.item_name);
 		option.textContent = capitalizeFirstLetter(meal.item_name);
+
+		option.addEventListener("click", addItem);
 
 		ing.appendChild(option);
 	}
@@ -174,6 +184,7 @@ save_btn.addEventListener("click", () => {
 			})
     			.then((response) => {
         			console.log("good");
+				viewPantry();
     			});
 
     			while (list.children.length)
@@ -184,7 +195,7 @@ save_btn.addEventListener("click", () => {
     	});
 });
 
-view_btn.addEventListener("click", () => {
+function viewPantry() {
     err.textContent = "";
 
     fetch("/viewpantrylist")
@@ -206,10 +217,13 @@ view_btn.addEventListener("click", () => {
                 pantry_ul.append(li);
                 li.textContent = body.rows[i].item_name;
             }
-            
         });
     });
-});
+}
+
+viewPantry();
+view_btn.addEventListener("click", viewPantry);
+
 </script>
 
 </body>
