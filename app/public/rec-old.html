@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="utf-8" />
+    <title>Recipe</title>
+
+    <style>
+        
+     </style>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class='page-links'>
+        <nav>
+      
+            <a href = "./index.html">Home</a>
+            <a href = "./login.html">Login</a>
+            <a href = "./rec.html">Get Recommendations</a>
+            <a href = "./pantry.html">Pantry</a>
+            <a href = "./shopping.html">Shopping List</a>
+            <a href = "./recipebook.html">Recipe Book</a>
+            
+         </nav>
+    </div>
+
+<div id="main"> 
+	<h1 class="page-title">Get Meal Recommendations</h1>
+    <div id="info">
+
+    </div>
+    <div id="err"></div>
+    <div>
+        <label for="query">Search:</label>
+        <input id="query" type="text" />
+    </div>
+
+    <div>
+        <label for="meal-type">Meal Type:</label>
+        <select name="meal-type" id="meal-select">
+            <option value="">Please select a meal type</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Snack">Snack</option>
+            
+        </select>
+    </div>
+
+    <div>
+        <label for="folder-name">Folder Name:</label>
+        <select name="folder-name" id="folder-name">
+            <option value="">Please select a folder</option>
+            <option value="To Be Cooked">To Be Cooked</option>
+            <option value="Liked">Liked</option>
+           
+        </select>
+    </div>
+
+    <button id="send">Recipe</button>
+    <button id="saverecipe-btn">Save to Recipe Book</button>
+    <label for="healthfilter">Choose a dietary filter:</label>
+    <select name="healthfilter" id="HealthFilter">
+        <option value="none">None</option>
+        <option value="Alcohol-Free">Alcohol Free</option>
+        <option value="Dairy-Free">Dairy Free</option>
+        <option value="Crustacean-Free">Crustacean Free</option>
+        <option value="Gluten-Free">Gluten Free</option>
+        <option value="Keto-Friendly">Keto Friendly</option>
+        <option value="Kosher">Kosher</option>
+        <option value="Vegan">Vegan</option>
+        <option value="Tree-Nut-Free">Tree Nut Free</option>
+        <option value="Paleo">Paleo</option>
+        <option value="Peanut-Free">Peanut Free</option>
+
+
+    </select>
+
+    <div>
+    <label class="switch">Only show recipes that use current pantry items:
+    	  <input type="checkbox" id="IngredientFilter">
+    </label>
+    </div>
+
+    <table id="data-table" style="text-align: center"> 
+        <thead>
+            <tr style="background: #80c8e0; font-size: 24px; box-shadow: 0 0 1.5px 0 black;">
+                <td style="font-weight: bold; width: 232.483px; color: white;">
+                    Recipe Name
+                </td>
+                <td style="font-weight: bold; width: 526.7px; color: white;">
+                    Ingredients
+                </td>
+                <td style="font-weight: bold; width: 75.8333px; color: white;">
+                    Calories
+                </td>
+                <td style="font-weight: bold; width: 320.667px; color: white;">
+                    Image
+                </td>
+		    <td style="font-weight: bold; width: 83.65px; color: white;">
+			  Save Recipe
+		    </td>
+            </tr>
+        </thead>
+        
+    </table>
+
+	<div class="footer">
+  		<p>Sujoy Bose, Avery Deemer, Kevin Hang, Chris Li, Adam Sao - 2022</p>
+	</div>
+
+
+    <script src="functions.js"></script>
+</div> 
+    <script>
+
+        //recipe.health label
+	function healthfilter(recipes, filter) {
+		let count = 0;
+            for (let rec of recipes) {
+                	if (!rec.recipe.healthLabels.includes(filter)) {
+				console.log("DEBUG: " + rec);
+				delete recipes[count];
+			}
+			count += 1;
+            }
+		console.log("Filtered: ", recipes);
+            return recipes;
+     	}
+
+        //calculates how many more ingredients are needed compared to what is in the pantry
+        function ingredient_disparity(recipes, ingredient_list) {
+            for (let recipe of recipes) {
+                let required_ingredients = [];
+                for (let recipe_ingredient of recipe.ingredients) {
+                    let disparity = recipe.ingredients.length();
+                    let initial = disparity;
+                    for (let ingredient of ingredient_list) {
+                        if (recipe_ingredient === ingredient) {
+                            disparity -= 1;
+                        } 
+                    }
+                    if (disparity === initial) {
+                        required_ingredients.push(recipe_ingredient);
+                    }
+                }
+                recipe["disparity"] = disparity;
+                recipe["shopping_list"] = required_ingredients;
+            }
+        }
+
+	function comparePantryAndRecipe(recipe) {
+		console.log("DEBUG: " + recipe);
+		let found = false;
+		for (let ingredient of recipe.recipe.ingredients) {
+			for (let pantryItem of pantryList) {
+				if (pantryItem.item_name === capitalizeFirstLetter(ingredient.food)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				return false;
+			found = false;
+		}
+		return true;
+	}
+
+	function capitalizeFirstLetter(string) {
+  		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
+
+        let query_input = document.getElementById("query");
+        let mealtype_input = document.getElementById("meal-select");
+        let btn = document.getElementById("send");
+        let table = document.getElementById("data-table");
+        let folder_name = document.getElementById("folder-name");
+	  let ingredientFilter = document.getElementById("IngredientFilter");
+	  let err = document.getElementById("err");
+	  let pantryList = null;
+	  let body = null;
+
+        let tbody = document.createElement("tbody");
+        tbody.id = "t-body";
+        table.append(tbody);
+        let start_tbody = document.getElementById("t-body");
+        
+
+        table.style.border = '1px solid black';
+        table.style.borderCollapse = 'collapse';
+        table.style.padding = '3px';
+        table.style.tableLayout = 'fixed';
+
+	  fetch("/viewpantrylist")
+        .then((response) => {
+		  return response.json();
+	  }).then((data) => {
+		  pantryList = data.rows;
+	  });
+
+	  //AVERY 11/20/2022
+	  function func() {
+		let results = 0;
+
+		err.textContent = " ";
+
+		//AVERY 11/20/2022
+            let recipes = body.data1.hits.concat(body.data2.hits);
+		console.log(recipes);
+
+            if (tbody.hasChildNodes())
+            {   
+            	for (let i = tbody.children.length - 1; i >= 0; i--) {  
+                  	tbody.children[i].remove();
+                	}
+            }
+
+            //filters if filter is selected
+		let f = document.getElementById("HealthFilter").value;
+
+		function dietFilter(x) {
+			return x.recipe.healthLabels.includes(f);
+		}	
+	
+            if (f !== "none")
+            	recipes = recipes.filter(dietFilter);
+		console.log("DEBUG2: ", f);
+
+		console.log("DEBUG3: ", recipes);
+
+            for (let i = 0; i < recipes.length; i++) {
+			if (ingredientFilter.checked) {
+				if (!comparePantryAndRecipe(recipes[i]))
+					continue;
+			}
+
+			results += 1;
+                  let tr = document.createElement('tr');
+
+                  tbody.append(tr);
+                  let td1 = document.createElement('td');
+                  tr.append(td1);
+                  td1.textContent = recipes[i].recipe.label;
+                  let td2 = document.createElement('td');
+                  tr.append(td2);
+                  let ingr_rows = recipes[i].recipe.ingredientLines.length;
+
+                  let ul = document.createElement('ul');
+                  td2.append(ul);
+                  for (let j = 0; j < ingr_rows; j++) {
+                  	let li = document.createElement('li');
+                        ul.append(li);
+                        li.textContent = recipes[i].recipe.ingredientLines[j];
+                  }
+                        
+                        let td3 = document.createElement('td');
+                        tr.append(td3);
+                        td3.textContent = Math.round(recipes[i].recipe.calories);
+                        let td4 = document.createElement('td');
+                        tr.append(td4);
+                        food_img = document.createElement('img');
+                        td4.append(food_img);
+                        food_img.src = recipes[i].recipe.image;
+                        
+                        td4 = document.createElement('td');
+                        tr.append(td4);
+
+                        let save_cb = document.createElement('input');
+                        
+                        save_cb.type = "checkbox";
+                        save_cb.class = "saverecipe";
+                        save_cb.name = "saverecipe";
+                        td4.append(save_cb);
+                    }
+
+			  //AVERY 11/20/2022
+			  if (results == 0) {
+				  err.textContent = "No results";
+			  }
+	  }
+
+	  //AVERY 11/20/2022
+        btn.addEventListener("click", () => {
+		let q_input = query_input.value;
+            let meal_input = mealtype_input.value;
+            let q_string = `/recipe?search=${q_input}&mealtype=${meal_input}`;
+
+		err.textContent = "";
+
+            fetch(q_string)
+            .then((response) => {
+            	return response.json()
+            }).then((data) => {
+			if (data.err != null) {
+				err.textContent = data.err;
+			} else {
+				body = data;	
+				func();
+			}
+		});
+	  });
+
+	let cb = document.getElementsByName("saverecipe");
+      let save_btn = document.getElementById("saverecipe-btn");
+
+      save_btn.addEventListener("click", () => {
+		for (let i = 0; i < cb.length; i++) {
+			if (cb[i].checked) {
+				console.log(folder_name.value);
+                        fetch("/saverecipe", {
+				method: "POST",
+                        	headers: {
+                              "Content-Type": "application/json"
+                              },
+                                    
+                              body: JSON.stringify({
+                              	recipe: alt_recipes[i].recipe,
+                                    folder_name: folder_name.value
+                              })
+				})
+				.then((response) => {
+					response.text();
+				}).then((body) => {
+					console.log("success");
+				});
+			}
+		}
+	});
+
+	ingredientFilter.addEventListener("click", () => {
+		if (body !== null)
+			func();
+	});
+
+	for (let c of document.getElementById("HealthFilter").children) {
+		c.addEventListener("click", () => {
+			if (body !== null)
+				func();
+		});
+	}
+        
+        
+    </script>
+</body>
+
+</html>
