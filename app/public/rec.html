@@ -304,6 +304,18 @@
 
       save_btn.addEventListener("click", () => {
 		for (let i = 0; i < cb.length; i++) {
+            let store_recipe;
+
+            if (i >= 0 && i <=19 )
+                {
+                    store_recipe = body.data1.hits[i].recipe;
+                }
+                else
+                {
+                    let real_idx = i-20;
+                    store_recipe = body.data2.hits[real_idx].recipe;
+                }
+
 			if (cb[i].checked) {
 				console.log(folder_name.value);
                         fetch("/saverecipe", {
@@ -313,7 +325,7 @@
                               },
                                     
                               body: JSON.stringify({
-                              	recipe: alt_recipes[i].recipe,
+                              	recipe: store_recipe,
                                     folder_name: folder_name.value
                               })
 				})
