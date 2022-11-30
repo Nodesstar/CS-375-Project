@@ -27,6 +27,7 @@ app.get("/recipe", (req,res) => {
     	let q_value = req.query.search;
     	let meal_value = req.query.mealtype;
         let health_value = req.query.health;
+        let x = 0;
 
 	if (q_value.length == 0) {
 		res.status(400);
