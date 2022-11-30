@@ -111,11 +111,11 @@
 	</div>
 
 
-    <script src="functions.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </div> 
     <script>
-
-        //recipe.health label
+        
+        //https://www.w3schools.com/howto/howto_google_charts.asp
         function healthfilter(recipes, filter) {
             let filtered = [];
             for (let recipe of recipes) {
@@ -126,8 +126,9 @@
                     }
                 }
             }
-            return filtered;
+            return {"recipes": filtered};
         }
+        let x = 0;
 
         //calculates how many more ingredients are needed compared to what is in the pantry
         function ingredient_disparity(recipes, ingredient_list) {
@@ -165,6 +166,25 @@
 		}
 		return true;
 	}
+
+    //adds macros to recipe
+    function get_macros(recipe) {
+        let carbs = 0;
+        let protein = 0;
+        let fat = 0;
+        let macros = [];
+        for (let macro of recipe.totalNutrients) {
+            if (macro.label === "Carbs") {
+                recipe["carbs"] = macro.quantity;
+            }
+            if (macro.label === "Protein") {
+                recipe["protein"] = macro.quantity;
+            }
+            if (macro.label === "Fat") {
+                recipe["fat"] = macro.quantity;
+            }
+        }
+    }
 
 	function capitalizeFirstLetter(string) {
   		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -218,12 +238,9 @@
                   	tbody.children[i].remove();
                 	}
             }
+            console.log(recipes);
 
-            //filters if filter is selected
-             let filter = document.getElementById("HealthFilter").value;
-            if (filter !== "none") {
-            	recipes = healthfilter(recipes, filter);
-            } 
+            console.log(recipes);
 
             for (let i = 0; i < rows; i++) {
 			if (!comparePantryAndRecipe(recipes[i]) && ingredientFilter) {
@@ -277,14 +294,20 @@
 	  //AVERY 11/20/2022
         btn.addEventListener("click", () => {
 		let q_input = query_input.value;
-            let meal_input = mealtype_input.value;
-            let q_string = `/recipe?search=${q_input}&mealtype=${meal_input}`;
+        let meal_input = mealtype_input.value;
+        let labelfilter = [];
+        labelfilter.push(document.getElementById("HealthFilter").value);
+        console.log(labelfilter);
+        let q_string = '';
+        q_string = `/recipe?search=${q_input}&health=${labelfilter}&mealtype=${meal_input}`;
 
 		err.textContent = "";
 
             fetch(q_string)
             .then((response) => {
-            	return response.json()
+                let recipes = response.json();
+                //get_macros(recipes);
+            	return recipes;
             }).then((data) => {
 			if (data.err != null) {
 				err.textContent = data.err;
