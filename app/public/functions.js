@@ -41,17 +41,15 @@ function get_macros(recipe) {
     let carbs = 0;
     let protein = 0;
     let fat = 0;
-    let macros = [];
     for (let macro of recipe.totalNutrients) {
         if (macro.label === "Carbs") {
-            macros.push(macro.quantity); 
+            recipe["carbs"] = macro.quantity;
         }
         if (macro.label === "Protein") {
-            macros.push(macro.quantity);
+            recipe["protein"] = macro.quantity;
         }
         if (macro.label === "Fat") {
-            macros.push(macro.quantity) ;
+            recipe["fat"] = macro.quantity;
         }
     }
-    recipe["macros"] = macros;
 }
