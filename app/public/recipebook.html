@@ -16,7 +16,7 @@
     <body>
 
         <nav>
-            <a href = "./index.html">Home</a>
+            <a href = "./home.html">Home</a>
             <a href = "./login.html">Login</a>
             <a href = "./rec.html">Get Recommendations</a>
             <a href = "./pantry.html">Pantry</a>
@@ -25,7 +25,7 @@
         </nav>
 
 	<div id="main"> 
-	<h1 class="page-title">My Recipebook</h1>
+	<h1 class="page-title" id = "page-title"></h1>
         <button id="show-btn">
             Show Saved Recipes
         </button>
@@ -69,6 +69,19 @@
 
 	</div>
         <script>
+	    let header1 = document.getElementById("page-title");
+	    fetch("/home")
+        .then((response) => {
+            return response.text();
+        }).then((body) => {
+            if (body == "Error") {
+                window.location.href = "login.html";
+            } else {
+                let username = body;
+                header1.textContent = body + "'s Recipe Book";
+            }
+            
+        });
             let recipe_ul = document.getElementById("recipe");
             let show_btn = document.getElementById("show-btn");
             let delete_btn = document.getElementById("delete-entry");
