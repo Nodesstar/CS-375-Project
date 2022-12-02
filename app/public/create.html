@@ -87,13 +87,13 @@ document.getElementById("create").addEventListener("click", () => {
 			plaintextPassword: passwordInput.value,
 		})
 	}).then((response) => {
-		if (response.status === 200) {
-			result.textContent = "Account was created";
-			result.classList.remove("error");
-		} else {
-			result.textContent = "Account creation failed";
-			result.classList.add("error");
-		}
+	
+		
+		return response.text();
+	}).then((body) => {
+		console.log("body: ", body);
+		result.textContent = body;
+
 	});
 });
 </script>
