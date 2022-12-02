@@ -15,7 +15,7 @@
     <div class='page-links'>
         <nav>
       
-            <a href = "./index.html">Home</a>
+            <a href = "./home.html">Home</a>
             <a href = "./login.html">Login</a>
             <a href = "./rec.html">Get Recommendations</a>
             <a href = "./pantry.html">Pantry</a>
@@ -26,7 +26,7 @@
     </div>
 
 <div id="main"> 
-	<h1 class="page-title">Get Meal Recommendations</h1>
+	<h1 class="page-title" id = "page-title"></h1>
     <div id="info">
 
     </div>
@@ -114,7 +114,18 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </div> 
     <script>
-        
+        let header1 = document.getElementById("page-title");
+        fetch("/home")
+        .then((response) => {
+            return response.text();
+        }).then((body) => {
+            if (body == "Error") {
+                window.location.href = "login.html";
+            } else {
+                header1.textContent += "Get Meal Recommendations for " + body;
+            }
+            
+        });
         //https://www.w3schools.com/howto/howto_google_charts.asp
         function healthfilter(recipes, filter) {
             let filtered = [];
