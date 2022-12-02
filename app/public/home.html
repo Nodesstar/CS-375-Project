@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="utf-8" />
+    <title>Recipe</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+       
+    </style>
+</head>
+
+<body>
+    <div id="info">
+
+    </div>
+    <div class='page-links'>
+        <nav>
+      
+            <a href = "./home.html">Home</a>
+            <a href = "./login.html">Login</a>
+            <a href = "./rec.html">Get Recommendations</a>
+            <a href = "./pantry.html">Pantry</a>
+            <a href = "./shopping.html">Shopping List</a>
+            <a href = "./recipebook.html">Recipe Book</a>
+
+            
+            
+         </nav>
+    </div>
+
+	<div id="main">
+        
+		<h1 class="page-title">Welcome to Munchlax at Midnight!</h1>
+        <h1 id = "user"> </h1>
+		<img src="https://media.tenor.com/VFe_M1wmVAwAAAAC/munchlax-pokemon.gif">
+        
+		<div class="footer">
+  			<p>Sujoy Bose, Avery Deemer, Kevin Hang, Chris Li, Adam Sao - 2022</p>
+		</div>
+    	</div>
+    
+    <script>
+    userTest = document.getElementById("user");
+
+    fetch("/home")
+    .then((response) => {
+        return response.text();
+    }).then((body) => {
+        if (body == "Error") {
+            window.location.href = "login.html";
+        } else {
+            userTest.textContent = 'Welcome back, ' + body + '!';
+            
+        }
+        
+});
+        
+        
+        
+    </script>
+</body>
+
+</html>
