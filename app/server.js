@@ -44,14 +44,15 @@ app.post("/signup", (req, res) => {
     
     let plaintextPassword = req.body.plaintextPassword;
     if (typeof username !== 'string' || typeof plaintextPassword !== 'string' || username.length < 1 || username.length > 25 && plaintextPassword.length < 5 || plaintextPassword.length > 36) {
-        res.sendStatus(401);
+        res.send("Incorrect Parameters");
     }
     pool.query("SELECT username FROM users WHERE username = $1", [
         username,
     ]).then((result) => {
         if (result.rows.length > 0) {
             
-            return res.status(401).send();
+            res.send("User already exists");
+            res.end();
         } else {
             bcrypt
             .hash(plaintextPassword, saltRounds)
@@ -63,7 +64,8 @@ app.post("/signup", (req, res) => {
                     .then(() => {
                         // account created
                         console.log(username, "account created");
-                        res.status(200).send();
+                        res.send("Account created");
+                        res.end();
                     })
                     .catch((error) => {
                         // insert failed
