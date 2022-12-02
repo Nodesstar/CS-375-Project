@@ -52,31 +52,35 @@ app.post("/signup", (req, res) => {
         if (result.rows.length > 0) {
             
             return res.status(401).send();
-        }});
-
-    bcrypt
-        .hash(plaintextPassword, saltRounds)
-        .then((hashedPassword) => {
-            pool.query(
-                "INSERT INTO users (username, hashed_password) VALUES ($1, $2)",
-                [username, hashedPassword]
-            )
-                .then(() => {
-                    // account created
-                    console.log(username, "account created");
-                    res.status(200).send();
-                })
-                .catch((error) => {
-                    // insert failed
-                    console.log(error);
-                    res.status(500).send();
-                });
-        })
-        .catch((error) => {
-            // bcrypt crashed
-            console.log(error);
-            res.status(500).send();
-        });
+        } else {
+            bcrypt
+            .hash(plaintextPassword, saltRounds)
+            .then((hashedPassword) => {
+                pool.query(
+                    "INSERT INTO users (username, hashed_password) VALUES ($1, $2)",
+                    [username, hashedPassword]
+                )
+                    .then(() => {
+                        // account created
+                        console.log(username, "account created");
+                        res.status(200).send();
+                    })
+                    .catch((error) => {
+                        // insert failed
+                        console.log(error);
+                        res.status(500).send();
+                    });
+            })
+            .catch((error) => {
+                // bcrypt crashed
+                console.log(error);
+                res.status(500).send();
+            });
+        }
+    
+    
+    });
+    
 });
 
 app.post("/signin", (req, res) => {
