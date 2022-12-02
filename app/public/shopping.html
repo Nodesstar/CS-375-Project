@@ -14,7 +14,7 @@
 
     <nav>
       
-        <a href = "./index.html">Home</a>
+        <a href = "./home.html">Home</a>
             <a href = "./login.html">Login</a>
             <a href = "./rec.html">Get Recommendations</a>
             <a href = "./pantry.html">Pantry</a>
@@ -24,7 +24,7 @@
      </nav>
      
 	<div id="main"> 
-	<h1 class="page-title">My Shopping List</h1>
+	<h1 class="page-title" id = "page-title"></h1>
 
      <button id="shopping-list">
         View Shopping List
@@ -41,6 +41,20 @@
 
 	</div>
 <script>
+let header1 = document.getElementById("page-title");
+    let username = '';
+	fetch("/home")
+        .then((response) => {
+            return response.text();
+        }).then((body) => {
+            if (body == "Error") {
+                window.location.href = "login.html";
+            } else {
+                username = body;
+                header1.textContent = username + "'s Shopping List";
+            }
+            
+        });
 
 let shopping_btn = document.getElementById("shopping-list");
 let display = document.getElementById("display");
