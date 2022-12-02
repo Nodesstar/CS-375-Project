@@ -7,22 +7,54 @@
 .error {
 	color: red;
 }
+.inputs {
+  margin-left: auto;
+  margin-right: auto;
+}
+#main {
+	margin-top: 80px;
+	margin-left: 20px;
+	margin-bottom: 77px;
+	margin-right: 20px;
+	text-align: center;
+	font-family: Garamond, serif;
+}
+
+body {
+  margin-left: auto;
+  margin-right: auto;
+  background: #e9f2f5;
+  background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/fa1f38b3-1b53-4ee3-afac-477fe31a439e/de1yeup-fb248137-6d67-4e79-bb12-c469729fdf4e.jpg/v1/fill/w_1192,h_670,q_70,strp/munchlax__pokemon__wallpaper_by_jesgreeneight_de1yeup-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6IlwvZlwvZmExZjM4YjMtMWI1My00ZWUzLWFmYWMtNDc3ZmUzMWE0MzllXC9kZTF5ZXVwLWZiMjQ4MTM3LTZkNjctNGU3OS1iYjEyLWM0Njk3MjlmZGY0ZS5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.os_nvp8QEEkEoY3z3ahYfmgrXXoOKtjyUvEGSY9DWXg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+table {
+	margin-top: 10px;
+	background: white;
+	/*box-shadow: 0 0 2px 0 black;*/
+}
+
+td {
+      border-collapse: collapse;
+      /*border: 1px solid #224f5e;*/
+      padding: 10px;
+}
+
+tr:nth-of-type(odd) {
+	background: #d2d5d6;
+}
 </style>
+
 </head>
 <body>
+<div id="main">     
 
-    <nav>
-      
-        <a href = "./index.html">Home</a>
-        <a href = "./login.html">Login</a>
-        <a href = "./rec.html">Get Recommendations</a>
-        
-     </nav>
-<h1>My cool site</h1>
+<h1 class = "page-title">My cool site</h1>
 
 <h2>Create a new account</h2>
 
-<table>
+<table class = "inputs">
 	<tr>
 		<td><label name="username" for="username">Username:</label></td>
 		<td><input type="text" id="username"></td>
@@ -32,7 +64,7 @@
 		<td><input type="password" id="password"></td>
 	</tr>
 </table>
-
+<br>
 <button id="create">Create account</button>
 
 <div id="result">&nbsp;</div>
