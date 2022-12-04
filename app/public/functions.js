@@ -38,18 +38,12 @@ function ingredient_disparity(recipes, ingredient_list) {
 
 //adds macros to recipe
 function get_macros(recipe) {
-    let carbs = 0;
-    let protein = 0;
-    let fat = 0;
-    for (let macro of recipe.totalNutrients) {
-        if (macro.label === "Carbs") {
-            recipe["carbs"] = macro.quantity;
-        }
-        if (macro.label === "Protein") {
-            recipe["protein"] = macro.quantity;
-        }
-        if (macro.label === "Fat") {
-            recipe["fat"] = macro.quantity;
-        }
-    }
+    let nuts = recipe.totalNutrients;
+    let carbs = nuts.CHOCDF;
+    let fat = nuts.FAT;
+    let protein = nuts.PROCNT;
+    recipe["carbs"] = carbs.quantity;
+    recipe["fat"] = fat.quantity;
+    recipe["protein"] = protein.quantity;
+    
 }

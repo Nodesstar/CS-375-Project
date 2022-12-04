@@ -180,21 +180,13 @@
 
     //adds macros to recipe
     function get_macros(recipe) {
-        let carbs = 0;
-        let protein = 0;
-        let fat = 0;
-        let macros = [];
-        for (let macro of recipe.totalNutrients) {
-            if (macro.label === "Carbs") {
-                recipe["carbs"] = macro.quantity;
-            }
-            if (macro.label === "Protein") {
-                recipe["protein"] = macro.quantity;
-            }
-            if (macro.label === "Fat") {
-                recipe["fat"] = macro.quantity;
-            }
-        }
+    let nuts = recipe.totalNutrients;
+    let carbs = nuts.CHOCDF;
+    let fat = nuts.FAT;
+    let protein = nuts.PROCNT;
+    recipe["carbs"] = carbs.quantity;
+    recipe["fat"] = fat.quantity;
+    recipe["protein"] = protein.quantity;
     }
 
 	function capitalizeFirstLetter(string) {
@@ -239,7 +231,7 @@
 		//AVERY 11/20/2022
             let recipes = body.data1.hits.concat(body.data2.hits);
 
-		console.log(comparePantryAndRecipe(body.data1.hits[0]))
+		//console.log(comparePantryAndRecipe(body.data1.hits[0]))
 
             let rows = Object.keys(recipes).length;
 
@@ -249,8 +241,11 @@
                   	tbody.children[i].remove();
                 	}
             }
-            console.log(recipes);
-
+            
+            for (let x of recipes) {
+                let recipe = x.recipe;
+                get_macros(recipe);
+            }
             console.log(recipes);
 
             for (let i = 0; i < rows; i++) {
@@ -308,7 +303,6 @@
         let meal_input = mealtype_input.value;
         let labelfilter = [];
         labelfilter.push(document.getElementById("HealthFilter").value);
-        console.log(labelfilter);
         let q_string = '';
         q_string = `/recipe?search=${q_input}&health=${labelfilter}&mealtype=${meal_input}`;
 
@@ -317,14 +311,12 @@
             fetch(q_string)
             .then((response) => {
                 let recipes = response.json();
-                //get_macros(recipes);
             	return recipes;
             }).then((data) => {
 			if (data.err != null) {
 				err.textContent = data.err;
 			} else {
 				body = data;
-			
 				if (ingredientFilter.checked)
 					func(true);
 				else
@@ -351,7 +343,7 @@
                 }
 
 			if (cb[i].checked) {
-				console.log(folder_name.value);
+				//console.log(folder_name.value);
                         fetch("/saverecipe", {
 				method: "POST",
                         	headers: {
