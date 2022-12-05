@@ -6,11 +6,13 @@ CREATE TABLE users (
 );
 CREATE TABLE pantry (
 	id SERIAL PRIMARY KEY,
-	item_name VARCHAR(25),
+    username VARCHAR(25) REFERENCES users(username),
+	item_name JSON,
 	have_status BOOLEAN
 );
 CREATE TABLE recipebook(
     id SERIAL PRIMARY KEY,
+    username VARCHAR(25) REFERENCES users(username),
     recipe_info JSON,
     folder_name VARCHAR(50),
     rating INT
