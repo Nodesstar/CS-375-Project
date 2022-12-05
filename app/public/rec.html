@@ -127,6 +127,27 @@
             
         });
         //https://www.w3schools.com/howto/howto_google_charts.asp
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart(carbs, fat, protein, chart_location) {
+
+            let data = google.visualization.arrayToDataTable([
+            ['Carbs', carbs],
+            ['Fat',     fat],
+            ['Protein', protein]
+            ]);
+
+            let options = {
+            title: 'Macro Breakdown'
+            };
+
+            chart = new google.visualization.PieChart(chart_location);
+            chart.draw(data, options);
+        }
+
+
+
         function healthfilter(recipes, filter) {
             let filtered = [];
             for (let recipe of recipes) {
@@ -261,6 +282,7 @@
                   td1.textContent = recipes[i].recipe.label;
                   let td2 = document.createElement('td');
                   tr.append(td2);
+
                   let ingr_rows = recipes[i].recipe.ingredientLines.length;
 
                   let ul = document.createElement('ul');
@@ -283,6 +305,9 @@
                         td4 = document.createElement('td');
                         tr.append(td4);
 
+                        let td5 = document.createElement("td");
+                        tr.append(td5);
+                        drawChart(recipes[i].recipe.carbs, recipes[i].recipe.fat, recipes[i].recipe.protein, td5)
                         let save_cb = document.createElement('input');
                         
                         save_cb.type = "checkbox";
