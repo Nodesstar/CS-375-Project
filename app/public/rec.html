@@ -34,10 +34,7 @@
     <div>
         <label for="query">Search:</label>
         <input id="query" type="text" />
-    </div>
 
-    <div>
-        <label for="meal-type">Meal Type:</label>
         <select name="meal-type" id="meal-select">
             <option value="">Please select a meal type</option>
             <option value="Breakfast">Breakfast</option>
@@ -46,23 +43,16 @@
             <option value="Snack">Snack</option>
             
         </select>
-    </div>
-
-    <div>
-        <label for="folder-name">Folder Name:</label>
+        
         <select name="folder-name" id="folder-name">
             <option value="">Please select a folder</option>
             <option value="To Be Cooked">To Be Cooked</option>
             <option value="Liked">Liked</option>
            
         </select>
-    </div>
 
-    <button id="send">Recipe</button>
-    <button id="saverecipe-btn">Save to Recipe Book</button>
-    <label for="healthfilter">Choose a dietary filter:</label>
     <select name="healthfilter" id="HealthFilter">
-        <option value="none">None</option>
+        <option value="none">No Dietary Restrictions</option>
         <option value="alcohol-free">Alcohol Free</option>
         <option value="dairy-free">Dairy Free</option>
         <option value="crustacean-free">Crustacean Free</option>
@@ -74,8 +64,12 @@
         <option value="paleo">Paleo</option>
         <option value="peanut-free">Peanut Free</option>
 
-
     </select>
+    </div>
+    <div>
+        <button id="send">Recipe</button>
+        <button id="saverecipe-btn">Save to Recipe Book</button>
+    </div>
 
     <div>
     <label class="switch">Only show recipes that use current pantry items:
