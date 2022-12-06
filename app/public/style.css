@@ -112,3 +112,8 @@ button, select, input {
 .recipeButton {
 	width: 500px;
 }
+
+.saverecipe {
+	background-color: #224f5e;
+	color: #224f5e;
+}
