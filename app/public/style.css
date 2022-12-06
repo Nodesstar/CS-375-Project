@@ -103,3 +103,18 @@ div #err {
 table img {
 	box-shadow: 5px 5px 2px 0 black;
 }
+
+button, select, input {
+	background-color: white;
+	border: none;
+	color: #80c8e0;
+	padding: 8px;
+	text-align: center;
+	font-size: 15px;	
+	border-radius: 15px;
+	margin-top: 20px;
+}
+
+.recipeButton {
+	width: 500px;
+}
