@@ -318,11 +318,11 @@
                             }
                             });
 
-                        let save_cb = document.createElement('input');
-                        
-                        save_cb.type = "button";
+                        let save_cb = document.createElement('button');
+                    
                         save_cb.setAttribute("class", "saverecipe");
                         save_cb.name = "saverecipe";
+                        save_cb.textContent = "Save";
                         save_cb.addEventListener("click", () => {
                             let store_recipe = recipes[i].recipe;
                             let folder_name = document.getElementById("folder-name");
