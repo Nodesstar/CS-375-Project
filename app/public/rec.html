@@ -44,12 +44,6 @@
             
         </select>
         
-        <select name="folder-name" id="folder-name">
-            <option value="">Please select a folder</option>
-            <option value="To Be Cooked">To Be Cooked</option>
-            <option value="Liked">Liked</option>
-           
-        </select>
 
     <select name="healthfilter" id="HealthFilter">
         <option value="none">No Dietary Restrictions</option>
@@ -66,9 +60,19 @@
 
     </select>
     </div>
+
     <div>
-        <button id="send">Recipe</button>
         <button id="saverecipe-btn">Save to Recipe Book</button>
+        <select name="folder-name" id="folder-name">
+            <option value="">Please select a folder</option>
+            <option value="To Be Cooked">To Be Cooked</option>
+            <option value="Liked">Liked</option>
+           
+        </select>
+    </div>
+
+    <div>
+        <button id="send" class="recipeButton">Recipe</button>
     </div>
 
     <div>
@@ -313,9 +317,29 @@
 
                         let save_cb = document.createElement('input');
                         
-                        save_cb.type = "checkbox";
+                        save_cb.type = "button";
                         save_cb.class = "saverecipe";
                         save_cb.name = "saverecipe";
+                        save_cb.addEventListener("click", () => {
+                            let store_recipe = recipes[i].recipe;
+                            let folder_name = document.getElementById("folder-name");
+                            fetch("/saverecipe", {
+				                method: "POST",
+                        	    headers: {
+                                    "Content-Type": "application/json"
+                                },    
+                                body: JSON.stringify({
+                              	    recipe: store_recipe,
+                                    folder_name: folder_name.value
+                                })
+                        })
+                        .then((response) => {
+                            response.text();
+                        }).then((body) => {
+                            console.log("success");
+                        });
+                        });
+                        
                         td4.append(save_cb);
                     }
 
@@ -354,7 +378,7 @@
 	  });
 
 	let cb = document.getElementsByName("saverecipe");
-      let save_btn = document.getElementById("saverecipe-btn");
+    let save_btn = document.getElementById("saverecipe-btn");
 
       save_btn.addEventListener("click", () => {
 		for (let i = 0; i < cb.length; i++) {
