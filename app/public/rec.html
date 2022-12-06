@@ -16,6 +16,7 @@
         <nav>
       
             <a href = "./home.html">Home</a>
+            <a href = "./login.html">Login</a>
             <a href = "./rec.html">Get Recommendations</a>
             <a href = "./pantry.html">Pantry</a>
             <a href = "./shopping.html">Shopping List</a>
@@ -25,7 +26,7 @@
     </div>
 
 <div id="main"> 
-	<h1 class="page-title" id = "page-title">Get Meal Recommendations for <strong id="name"></strong></h1>
+	<h1 class="page-title" id = "page-title"></h1>
     <div id="info">
 
     </div>
@@ -95,9 +96,16 @@
                 <td style="font-weight: bold; color: white;">
                     Image
                 </td>
+<<<<<<< HEAD
 		    <td style="font-weight: bold; color: white;">
+=======
+		    <td style="font-weight: bold; width: 100px; color: white;">
+>>>>>>> cd1912e64a5f9e1e787357ad254a7d3fa99fd803
 			  Save Recipe
 		    </td>
+            <td style="font-weight: bold; width: 300px; color: white;">
+                Nutrition
+            </td>
             </tr>
         </thead>
         
@@ -111,18 +119,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </div> 
     <script>
-        let name = document.getElementById("name");
-        let username = '';
+        let header1 = document.getElementById("page-title");
         fetch("/home")
-            .then((response) => {
-                return response.text();
-            }).then((body) => {
-                if (body == "Error") {
-                    window.location.href = "login.html";
-                } else {
-                    username = body;
-                    name.textContent = username;
-                }
+        .then((response) => {
+            return response.text();
+        }).then((body) => {
+            if (body == "Error") {
+                window.location.href = "login.html";
+            } else {
+                header1.textContent += "Get Meal Recommendations for " + body;
+            }
+            
         });
         
 
@@ -315,11 +322,11 @@
                             }
                             });
 
-                        let save_cb = document.createElement('input');
-                        
-                        save_cb.type = "button";
-                        save_cb.class = "saverecipe";
+                        let save_cb = document.createElement('button');
+                    
+                        save_cb.setAttribute("class", "saverecipe");
                         save_cb.name = "saverecipe";
+                        save_cb.textContent = "Save";
                         save_cb.addEventListener("click", () => {
                             let store_recipe = recipes[i].recipe;
                             let folder_name = document.getElementById("folder-name");
