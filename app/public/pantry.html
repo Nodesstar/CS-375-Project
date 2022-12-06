@@ -13,16 +13,15 @@
     <nav>
       
         <a href = "./home.html">Home</a>
-            <a href = "./login.html">Login</a>
             <a href = "./rec.html">Get Recommendations</a>
             <a href = "./pantry.html">Pantry</a>
             <a href = "./shopping.html">Shopping List</a>
             <a href = "./recipebook.html">Recipe Book</a>
         
-     </nav>
+    </nav>
      
-     <div id="main">
-	<h1 class="page-title" id = "page-title"></h1>
+    <div id="main">
+	<h1 class="page-title" id = "page-title"><strong id="name"></strong>'s Pantry</h1>
 	
      <div class="dropdown"> 
      <label for="item">Item Name:</label>
@@ -73,17 +72,18 @@
     </div>
 
 <script>
-let header1 = document.getElementById("page-title");
-	fetch("/home")
-        .then((response) => {
-            return response.text();
-        }).then((body) => {
-            if (body == "Error") {
-                window.location.href = "login.html";
-            } else {
-                header1.textContent = body + "'s Pantry";
-            }
-            
+let name = document.getElementById("name");
+        let username = '';
+        fetch("/home")
+            .then((response) => {
+                return response.text();
+            }).then((body) => {
+                if (body == "Error") {
+                    window.location.href = "login.html";
+                } else {
+                    username = body;
+                    name.textContent = username;
+                }
         });
 function filterFunction() {
   let input, filter, a, i;

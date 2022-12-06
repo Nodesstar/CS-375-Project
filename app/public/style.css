@@ -1,6 +1,6 @@
 nav {
 	overflow: hidden;
-	text-align: center;
+	text-align: left;
 	background: #ADD8E6;
 	box-shadow: 0 0 5px 0 black;
 	position: fixed;
@@ -8,6 +8,7 @@ nav {
 	top: 0;
 	z-index: 10;
 	text-shadow: 0.5px 0.5px #224f5e;
+	padding-left: 75px;
 }
 
 nav a {
@@ -60,6 +61,11 @@ tr:nth-of-type(odd) {
 	text-shadow: 1px 1px 2px pink;
 	color: #224f5e;
 	-webkit-text-stroke: 0.5px #69b5cf;
+}
+
+.page-title strong {
+	color: #ADD8E6;
+	text-shadow: 1px 1px 1px black;
 }
 
 .item_list {

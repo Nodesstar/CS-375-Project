@@ -2,6 +2,7 @@ let axios = require("axios");
 let {Pool} = require("pg");
 let express = require("express");
 let app = express();
+let fs = require("fs");
 app.use(express.static("public"));
 app.use(express.json());
 
@@ -169,6 +170,10 @@ app.get("/recipe", (req,res) => {
 });
 
 //AVERY 11/20/2022 - Grabs ingredient list from API
+function capitalizeFirstLetter(string) {
+  	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 app.get("/ingredients", (req,res) => {
 	pool.query("SELECT * FROM ingredients")
       .then((result) => {
