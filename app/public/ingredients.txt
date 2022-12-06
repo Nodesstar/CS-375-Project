@@ -1,27 +1,3 @@
-CREATE DATABASE munchlaxatmidnight;
-\c munchlaxatmidnight;
-CREATE TABLE users (
-    username VARCHAR(25),
-    hashed_password CHAR(60)
-);
-CREATE TABLE pantry (
-	id SERIAL PRIMARY KEY,
-    username VARCHAR(25) REFERENCES users(username),
-	item_name JSON,
-	have_status BOOLEAN
-);
-CREATE TABLE recipebook(
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(25) REFERENCES users(username),
-    recipe_info JSON,
-    folder_name VARCHAR(50),
-    rating INT
-);
-CREATE TABLE ingredients(
-    id SERIAL PRIMARY KEY,
-    item_name TEXT
-);
-DELETE FROM ingredients;
 INSERT INTO ingredients (item_name) VALUES ('pork');
 INSERT INTO ingredients (item_name) VALUES ('lemon juice');
 INSERT INTO ingredients (item_name) VALUES ('maple syrup');
@@ -176,7 +152,7 @@ INSERT INTO ingredients (item_name) VALUES ('parsley');
 INSERT INTO ingredients (item_name) VALUES ('bay leaves');
 INSERT INTO ingredients (item_name) VALUES ('fennel seeds');
 INSERT INTO ingredients (item_name) VALUES ('yukon gold potatoes');
-INSERT INTO ingredients (item_name) VALUES ('crÃ¨me fraÃ®che');
+INSERT INTO ingredients (item_name) VALUES ('crème fraîche');
 INSERT INTO ingredients (item_name) VALUES ('mascarpone cheese');
 INSERT INTO ingredients (item_name) VALUES ('orange zest');
 INSERT INTO ingredients (item_name) VALUES ('tapioca');
@@ -372,7 +348,7 @@ INSERT INTO ingredients (item_name) VALUES ('fontina');
 INSERT INTO ingredients (item_name) VALUES ('orange curacao');
 INSERT INTO ingredients (item_name) VALUES ('arborio rice');
 INSERT INTO ingredients (item_name) VALUES ('cumin');
-INSERT INTO ingredients (item_name) VALUES ('gruyÃ¨re');
+INSERT INTO ingredients (item_name) VALUES ('gruyère');
 INSERT INTO ingredients (item_name) VALUES ('butternut squash');
 INSERT INTO ingredients (item_name) VALUES ('grana padano');
 INSERT INTO ingredients (item_name) VALUES ('russet potatoes');
@@ -382,7 +358,7 @@ INSERT INTO ingredients (item_name) VALUES ('cloves');
 INSERT INTO ingredients (item_name) VALUES ('hot dogs');
 INSERT INTO ingredients (item_name) VALUES ('rice wine vinegar');
 INSERT INTO ingredients (item_name) VALUES ('chipotles');
-INSERT INTO ingredients (item_name) VALUES ('aÃ±ejo');
+INSERT INTO ingredients (item_name) VALUES ('añejo');
 INSERT INTO ingredients (item_name) VALUES ('sherry');
 INSERT INTO ingredients (item_name) VALUES ('pieces ginger');
 INSERT INTO ingredients (item_name) VALUES ('curry paste');
@@ -397,7 +373,7 @@ INSERT INTO ingredients (item_name) VALUES ('85% lean ground beef');
 INSERT INTO ingredients (item_name) VALUES ('ground veal');
 INSERT INTO ingredients (item_name) VALUES ('veal stock');
 INSERT INTO ingredients (item_name) VALUES ('ham');
-INSERT INTO ingredients (item_name) VALUES ('gruyÃ¨re cheese');
+INSERT INTO ingredients (item_name) VALUES ('gruyère cheese');
 INSERT INTO ingredients (item_name) VALUES ('mustard seeds');
 INSERT INTO ingredients (item_name) VALUES ('coconut sugar');
 INSERT INTO ingredients (item_name) VALUES ('lemon-lime soda');
@@ -445,6 +421,7 @@ INSERT INTO ingredients (item_name) VALUES ('fenugreek');
 INSERT INTO ingredients (item_name) VALUES ('gruyere cheese');
 INSERT INTO ingredients (item_name) VALUES ('shallots');
 INSERT INTO ingredients (item_name) VALUES ('coriander');
+INSERT INTO ingredients (item_name) VALUES ('confectioner\\('s sugar');
 INSERT INTO ingredients (item_name) VALUES ('navel oranges');
 INSERT INTO ingredients (item_name) VALUES ('cooking oil');
 INSERT INTO ingredients (item_name) VALUES ('cooked chicken');
@@ -477,4 +454,3 @@ INSERT INTO ingredients (item_name) VALUES ('yoghurt');
 INSERT INTO ingredients (item_name) VALUES ('coconut');
 INSERT INTO ingredients (item_name) VALUES ('cider vinegar');
 INSERT INTO ingredients (item_name) VALUES ('apples');
-

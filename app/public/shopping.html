@@ -15,7 +15,6 @@
     <nav>
       
         <a href = "./home.html">Home</a>
-            <a href = "./login.html">Login</a>
             <a href = "./rec.html">Get Recommendations</a>
             <a href = "./pantry.html">Pantry</a>
             <a href = "./shopping.html">Shopping List</a>
@@ -24,7 +23,7 @@
      </nav>
      
 	<div id="main"> 
-	<h1 class="page-title" id = "page-title"></h1>
+	<h1 class="page-title" id="page-title"><strong id="name"></strong>'s Shopping List</h1>
 
      <button id="shopping-list">
         View Shopping List
@@ -41,7 +40,7 @@
 
 	</div>
 <script>
-let header1 = document.getElementById("page-title");
+let name = document.getElementById("name");
     let username = '';
 	fetch("/home")
         .then((response) => {
@@ -51,7 +50,7 @@ let header1 = document.getElementById("page-title");
                 window.location.href = "login.html";
             } else {
                 username = body;
-                header1.textContent = username + "'s Shopping List";
+                name.textContent = username;
             }
             
         });

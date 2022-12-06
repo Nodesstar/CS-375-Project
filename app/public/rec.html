@@ -16,7 +16,6 @@
         <nav>
       
             <a href = "./home.html">Home</a>
-            <a href = "./login.html">Login</a>
             <a href = "./rec.html">Get Recommendations</a>
             <a href = "./pantry.html">Pantry</a>
             <a href = "./shopping.html">Shopping List</a>
@@ -26,7 +25,7 @@
     </div>
 
 <div id="main"> 
-	<h1 class="page-title" id = "page-title"></h1>
+	<h1 class="page-title" id = "page-title">Get Meal Recommendations for <strong id="name"></strong></h1>
     <div id="info">
 
     </div>
@@ -114,17 +113,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </div> 
     <script>
-        let header1 = document.getElementById("page-title");
+        let name = document.getElementById("name");
+        let username = '';
         fetch("/home")
-        .then((response) => {
-            return response.text();
-        }).then((body) => {
-            if (body == "Error") {
-                window.location.href = "login.html";
-            } else {
-                header1.textContent += "Get Meal Recommendations for " + body;
-            }
-            
+            .then((response) => {
+                return response.text();
+            }).then((body) => {
+                if (body == "Error") {
+                    window.location.href = "login.html";
+                } else {
+                    username = body;
+                    name.textContent = username;
+                }
         });
         
 
