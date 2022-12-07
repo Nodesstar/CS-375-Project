@@ -157,10 +157,7 @@ app.get("/recipe", (req,res) => {
 
     	axios.get(url)
     	.then((response) => {
-            if (response.data._links.next.href == null) {
-                return res.json({ data1: response.data, data2: [] });
-            }
-	        let link = response.data._links.next.href;
+		let link = response.data._links.next.href;
 
 		//AVERY 11/20/2022
 		axios.get(link)
