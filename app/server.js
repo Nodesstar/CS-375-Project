@@ -231,22 +231,28 @@ app.post('/pantry', (req,res) => {
             if (pantryItems.items === "" && isDeleteBtn === "true")
             {
                 pantryItems = pantryItems;
+                // sql_query = `DELETE FROM pantry WHERE username=$1`;
+                // pool.query(sql_query, [username])
+                // .then((result) => {
+                //     res.json(result);
+                // });
             }
             else
             {
                 let previousPantryItems = result.rows[0].item_name.items;
                 pantryItems.items = pantryItems.items + previousPantryItems;
+               
             }
-            
+             //update if the user has an existing pantry list
+             console.log(pantryItems);
+             console.log(username);
+             sql_query = `UPDATE pantry SET item_name=$1 WHERE username=$2`;
+             pool.query(sql_query, [pantryItems, username])
+             .then((result) => {
+                 res.json(result);
+             });
 
-            //update if the user has an existing pantry list
-            console.log(pantryItems);
-            console.log(username);
-            sql_query = `UPDATE pantry SET item_name=$1 WHERE username=$2`;
-            pool.query(sql_query, [pantryItems, username])
-            .then((result) => {
-                res.json(result);
-            });
+            
         }
         else
         {   
@@ -353,13 +359,32 @@ app.get("/shopping", (req,res) => {
 app.post("/saverecipe", (req,res) => {
     console.log(req.body.recipe.label);
     let username = req.query.username;
+    let isDeleteBtn = req.query.deleteBtn;
+    console.log("saverecipeDelete", isDeleteBtn);
     console.log(username);
     let recipe_json = req.body.recipe;
+    console.log(recipe_json);
     let folder_name = req.body.folder_name;
     console.log(folder_name);
     let rating = -1;
-    let q_str = `INSERT INTO recipebook(username, recipe_info,folder_name, rating) VALUES ($1, $2, $3, $4)`;
-    pool.query(q_str, [username, recipe_json, folder_name, rating]);
+    if (recipe_json === "" && isDeleteBtn === "true")
+    {
+        //recipe_json = {"recipe": ""};
+        let q_str = `DELETE FROM recipebook WHERE username=$1 AND folder_name=$2`;
+        pool.query(q_str, [username, folder_name])
+        .then(result => {
+            return res.json(result);
+        });
+    }
+    else
+    {
+        let q_str = `INSERT INTO recipebook(username, recipe_info,folder_name, rating) VALUES ($1, $2, $3, $4)`;
+        pool.query(q_str, [username, recipe_json, folder_name, rating])
+        .then(result => {
+            return res.json(result);
+        });
+    }
+    
 });
 
 app.get("/saved", (req,res) => {
