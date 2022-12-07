@@ -1,8 +1,8 @@
 CREATE DATABASE munchlaxatmidnight;
 \c munchlaxatmidnight;
 CREATE TABLE users (
-    username VARCHAR(250) NOT NULL UNIQUE,
-    hashed_password CHAR(160)
+    username VARCHAR(25),
+    hashed_password CHAR(60)
 );
 CREATE TABLE pantry (
 	id SERIAL PRIMARY KEY,
