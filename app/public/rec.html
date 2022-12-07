@@ -95,14 +95,8 @@
                 <td style="font-weight: bold; color: white;">
                     Image
                 </td>
-<<<<<<< HEAD
-		    <td style="font-weight: bold; color: white;">
-		    <td style="font-weight: bold; width: 100px; color: white;">
-			  Save Recipe
-=======
 		    <td style="font-weight: bold; width: 100px; color: white;">
 			  Save recipes
->>>>>>> e412678f2bd316809c76757b158162312a650658
 		    </td>
             <td style="font-weight: bold; width: 300px; color: white;">
                 Nutrition
@@ -133,9 +127,7 @@
                     name.textContent = username;
                 }
         });
-        
-
-
+    
 
         function healthfilter(recipes, filter) {
             let filtered = [];
@@ -332,21 +324,33 @@
                         save_cb.addEventListener("click", () => {
                             let store_recipe = recipes[i].recipe;
                             let folder_name = document.getElementById("folder-name");
-                            fetch("/saverecipe", {
-				                method: "POST",
-                        	    headers: {
+                            console.log(folder_name.value);
+
+                            if (folder_name.value === "") {
+                                save_cb.style.backgroundColor = "pink";
+                            } else {
+                                save_cb.style.color = "green";
+                                save_cb.style.backgroundColor = "#E8E8E8";
+                                //save_cb.font-style = "italic";
+                                save_cb.textContent = "Saved!";
+                                save_cb.style.opacity = "0.2";
+                                save_cb.disabled = true;
+                                fetch("/saverecipe", {
+                                method: "POST",
+                                headers: {
                                     "Content-Type": "application/json"
                                 },    
                                 body: JSON.stringify({
-                              	    recipe: store_recipe,
+                                    recipe: store_recipe,
                                     folder_name: folder_name.value
                                 })
-                        })
-                        .then((response) => {
-                            response.text();
-                        }).then((body) => {
-                            console.log("success");
-                        });
+                                })
+                                .then((response) => {
+                                    response.text();
+                                }).then((body) => {
+                                    console.log("success");
+                                });
+                            }
                         });
                         
                         td4.append(save_cb);

@@ -43,6 +43,7 @@ body {
 table {
 	margin-top: 10px;
 	background: white;
+	/*width: 100%;*/
 	/*box-shadow: 0 0 2px 0 black;*/
 }
 
@@ -54,6 +55,11 @@ td {
 
 tr:nth-of-type(odd) {
 	background: #d2d5d6;
+}
+
+tr:nth-of-type(even) button {
+	background: #d2d5d6;
+	color: #d7eef5;
 }
 
 .page-title {
@@ -122,11 +128,4 @@ button:hover, select:hover, input:hover {
 
 .recipeButton {
 	width: 500px;
-}
-
-.saverecipe {
-	background-color: #224f5e;
-	color: white;
-	width: 100px;
-	font-size: 15px;
 }
