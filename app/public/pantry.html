@@ -117,13 +117,23 @@ let deleteBtn = document.getElementById("delete-btn");
 
 
 function addItem() {
-
+		
     	for (let element of list.children) {
 		if (element.textContent == ingredient.value) {
 			err.textContent = "Item already in list";
 			return;
 		}
    	}
+	// for (let i = 0; i < list.children.length; i++)
+	// {
+	// 	if (list.children[i].textContent === ingredient.value)
+	// 	{
+	// 		err.textContent = "Item already in list";
+	// 		ingredient.value = "";
+	//  		return;
+	// 	}
+	// }
+	
 	let item = document.createElement("div");
 	let img = document.createElement("img");
 
