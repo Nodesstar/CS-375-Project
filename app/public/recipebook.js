@@ -28,19 +28,27 @@ fetch("/home")
                     .then((response) => {
                         response.json()
                         .then((body2) => {
-                            console.log(body);
-                            console.log(body2);
-                            let pantry_str = body2[0].item_name.items;
-                            let pantry_arr = pantry_str.split(",");
-                            
-                            for (let i = 0; i < body.length; i++)
+                            if (body2[0] === undefined)
                             {
-                                if (body[i].folder_name === folderInput.value)
-                                {
-                                    displayRecipes(body[i].recipe_info, pantry_arr);
-                                }
-                                
+                                alert("Fill out your Pantry profile before clicking further.");
                             }
+                            else
+                            {
+                                console.log(body);
+                                console.log(body2);
+                                let pantry_str = body2[0].item_name.items;
+                                let pantry_arr = pantry_str.split(",");
+                                
+                                for (let i = 0; i < body.length; i++)
+                                {
+                                    if (body[i].folder_name === folderInput.value)
+                                    {
+                                        displayRecipes(body[i].recipe_info, pantry_arr);
+                                    }
+                                    
+                                }
+                            }
+                            
                         });
                     });
 
