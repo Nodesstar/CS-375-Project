@@ -112,6 +112,9 @@ let save_btn = document.getElementById("save-btn");
 let view_btn = document.getElementById("view-btn");
 let pantry_ul = document.getElementById("view-pantry");
 let err = document.getElementById("err");
+let deleteBtn = document.getElementById("delete-btn");
+
+
 
 function addItem() {
 
@@ -160,34 +163,9 @@ fetch("/ingredients")
 	}
 });
 
-save_btn.addEventListener("click", () => {
-    	let n_items = list.children.length;
-	let found = false;
-  
-    	let pantry_str = "";
-	err.textContent = "";
-
-    	fetch("/viewpantrylist")
-    	.then((response) => {
-        	return response.json()
-        	.then((body) => {
-			console.log(list.children);
-            		for (let item of list.children) {
-				for (let pantryItem of body.rows) {
-					if (item.textContent === pantryItem.item_name) {
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					pantry_str += `${item.textContent},`;
-				}
-				found = false;
-			}
-
-			let q_string = `/pantry?${pantry_str}`;
-
-    			fetch("/pantry", {
+deleteBtn.addEventListener("click", () => {
+	let pantry_str = ""
+	fetch(`/pantry?username=${username}&deleteBtn=true`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -196,24 +174,172 @@ save_btn.addEventListener("click", () => {
 				body: JSON.stringify({
 					items: pantry_str
 				})
-			})
-    			.then((response) => {
-        			console.log("good");
+				})
+				.then((response) => {
+					console.log("good");
 				viewPantry();
-    			});
+				});
+	
+});
 
-    			while (list.children.length)
+save_btn.addEventListener("click", () => {
+    	let n_items = list.children.length;
+	let found = false;
+  
+    	let pantry_str = "";
+		let sqlPantryString;
+	err.textContent = "";
+		fetch("/viewpantrylist")
+		.then((response) => {
+			response.json()
+			.then((body) => {
+				console.log(body.rows);
+				let sqlPantryString;
+				for (let i = 0; i < body.rows.length; i++)
+				{
+					sqlPantryString = body.rows[i].item_name.items;
+
+					let pantry_arr = sqlPantryString.split(",");
+
+					// for ( let j = 0; j < pantry_arr.length; j++)
+					// {
+					// 	let li = document.createElement("li");
+					// 	pantry_ul.append(li);
+					// 	li.textContent = pantry_arr[j];
+					// }
+					if (body.rows[i].username === username)
+					{
+						console.log("lol",pantry_arr);
+						// for ( let j = 0; j < pantry_arr.length; j++)
+						// {
+						// 	let li = document.createElement("li");
+						// 	pantry_ul.append(li);
+						// 	li.textContent = pantry_arr[j];
+						// }
+						for (let j = 0; j < list.children.length; j++)
+						{
+							let itemToBeChecked = list.children[j].textContent.trim();
+							if(!pantry_arr.includes(itemToBeChecked.toLowerCase()))
+							{	
+								console.log("not included");
+								console.log(pantry_str);
+								pantry_str = pantry_str + itemToBeChecked.toLowerCase() + ",";
+								console.log(pantry_str);
+							}
+							else
+							{
+								err.textContent = "Added items not in the pantry yet";
+							}
+						}
+						
+					}
+					
+				}
+				
+				console.log(pantry_str);
+
+				fetch(`/pantry?username=${username}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+        
+				body: JSON.stringify({
+					items: pantry_str
+				})
+				})
+				.then((response) => {
+					console.log("good");
+				viewPantry();
+				});
+
+				while (list.children.length)
     			{
         			list.lastElementChild.remove();
     			}
-        	});
-    	});
+			});
+		});
+		
+    	// fetch("/viewpantrylist")
+    	// .then((response) => {
+        // 	return response.json()
+        // 	.then((body) => {
+		// 	//console.log(list.children);
+		// 	console.log("user:", username);
+		// 		console.log(body.rows);
+        //     		for (let item of list.children) {
+		// 		for (let pantryItem of body.rows) {
+		// 			if (item.textContent === pantryItem.item_name) {
+		// 				found = true;
+		// 				break;
+		// 			}
+		// 		}
+		// 		if (!found) {
+		// 			pantry_str += `${item.textContent},`;
+		// 		}
+		// 		found = false;
+		// 	}
+				
+
+		// 	let q_string = `/pantry?${pantry_str}`;
+
+    	// 		fetch("/pantry", {
+		// 		method: "POST",
+		// 		headers: {
+		// 			"Content-Type": "application/json"
+		// 		},
+        
+		// 		body: JSON.stringify({
+		// 			items: pantry_str
+		// 		})
+		// 	})
+    	// 		.then((response) => {
+        // 			console.log("good");
+		// 		viewPantry();
+    	// 		});
+
+    	// 		while (list.children.length)
+    	// 		{
+        // 			list.lastElementChild.remove();
+    	// 		}
+        // 	});
+    	// });
 });
 
-function viewPantry() {
-    err.textContent = "";
 
-    fetch("/viewpantrylist")
+function viewPantry() {
+    //err.textContent = "";
+
+	fetch("/viewpantrylist")
+	.then((response) => {
+		response.json()
+		.then((body) => {
+			while (pantry_ul.children.length)
+            {
+                
+                pantry_ul.lastElementChild.remove();
+            }
+			console.log(body.rows);
+			for (let i = 0; i < body.rows.length; i++)
+				{
+					let pantry_str = body.rows[i].item_name.items;
+					let pantry_arr = pantry_str.split(",");
+					if (body.rows[i].username === username)
+					{
+						for ( let j = 0; j < pantry_arr.length; j++)
+						{
+							let li = document.createElement("li");
+							pantry_ul.append(li);
+							li.textContent = pantry_arr[j];
+						}
+					}
+					
+					
+				}
+		});
+	});
+
+    /*fetch("/viewpantrylist")
     .then((response) => {
         response.json()
         .then((body) => {
@@ -233,7 +359,7 @@ function viewPantry() {
                 li.textContent = body.rows[i].item_name;
             }
         });
-    });
+    });*/
 }
 
 viewPantry();

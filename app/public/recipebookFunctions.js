@@ -1,7 +1,16 @@
-
+function get_macros(recipe) {
+    let nuts = recipe.totalNutrients;
+    let carbs = nuts.CHOCDF;
+    let fat = nuts.FAT;
+    let protein = nuts.PROCNT;
+    recipe["carbs"] = carbs.quantity;
+    recipe["fat"] = fat.quantity;
+    recipe["protein"] = protein.quantity;
+    }
 
 function displayRecipes(recipe_json, pantry_arr)
 {
+    get_macros(recipe_json);
     let recipeName = recipe_json.label;
     let ingredientsArr = recipe_json.ingredientLines;
     let justTheIngredientsArr = recipe_json.ingredients;
@@ -24,10 +33,12 @@ function displayRecipes(recipe_json, pantry_arr)
     tr.append(td1);
     td1.style.border = '1px solid black';
     let link_a = document.createElement("a");
+ 
     td1.append(link_a);
-    td1.textContent = recipeName;
     link_a.href = directions_link;
-    link_a.textContent = "How-to Directions";
+    console.log(directions_link);
+    link_a.textContent = recipeName;
+    link_a.target = '_blank';
 
     let td2 = document.createElement("td");
     tr.append(td2);
@@ -64,11 +75,36 @@ function displayRecipes(recipe_json, pantry_arr)
     let td5 = document.createElement("td");
     tr.append(td5);
     td5.style.border = '1px solid black';
+    let can = document.createElement("canvas");
+    td5.append(can);
     
+    //can.setAttribute("id", "canva" + i.toString());
+    can.style.width = "100%";
+    can.style.maxWidth = "600px";
+    //var ctx = document.getElementById(can.id).getContext('2d');
+    var ctx = can.getContext('2d');
+    var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#1e7145"
+        ];
+    new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Carbs", "Fats", "Proteins"],
+            datasets: [{
+            backgroundColor: barColors,
+            data: [recipe_json.carbs, recipe_json.fat, recipe_json.protein]
+            }]
+        },
+        options: {
+            title: {
+            display: false,
+            text: "Nutrition Breakdown"
+            }
+        }
+        });
     
-
-    
-
     
     
 }

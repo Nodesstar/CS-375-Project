@@ -344,7 +344,9 @@
                                 save_cb.textContent = "Saved!";
                                 save_cb.style.opacity = "0.2";
                                 save_cb.disabled = true;
-                                fetch("/saverecipe", {
+
+
+                                fetch(`/saverecipe?username=${username}`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json"

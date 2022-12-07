@@ -213,10 +213,56 @@ app.get("/test", (req,res) => {
 
 app.post('/pantry', (req,res) => {
     console.log(req.body);
-    let n_items = req.body.items.split(",").length - 1;
-    let items = req.body.items.split(",");
+    let sql_query;
+    let pantryItems = req.body;
+    let username = req.query.username;
+    let isDeleteBtn = req.query.deleteBtn;
+    console.log("delete", isDeleteBtn);
+    //username = "kieran";
     
-    for (let i = 0; i < n_items; i++)
+    //check to see if the username has a pantry already
+    sql_query = `SELECT * FROM pantry WHERE username=$1`;
+    pool.query(sql_query, [username])
+    .then((result) => {
+        if (result.rows.length > 0)
+        {
+            //get the previous stored JSON of pantry items
+            //should only be one JSON for each user
+            if (pantryItems.items === "" && isDeleteBtn === "true")
+            {
+                pantryItems = pantryItems;
+            }
+            else
+            {
+                let previousPantryItems = result.rows[0].item_name.items;
+                pantryItems.items = pantryItems.items + previousPantryItems;
+            }
+            
+
+            //update if the user has an existing pantry list
+            console.log(pantryItems);
+            console.log(username);
+            sql_query = `UPDATE pantry SET item_name=$1 WHERE username=$2`;
+            pool.query(sql_query, [pantryItems, username])
+            .then((result) => {
+                res.json(result);
+            });
+        }
+        else
+        {   
+            //insert if the user does not have a pantry list
+            sql_query = `INSERT INTO pantry(username, item_name, have_status) VALUES ($1, $2, $3)`;
+
+            pool.query(sql_query, [username, pantryItems, true])
+            .then((result) => {
+                res.json(result);
+            });
+        }
+    });
+    //let n_items = req.body.items.split(",").length - 1;
+    //let items = req.body.items.split(",");
+    
+    /*for (let i = 0; i < n_items; i++)
     {
         let item_name = items[i];
         console.log(item_name);
@@ -225,7 +271,48 @@ app.post('/pantry', (req,res) => {
             `INSERT INTO pantry(item_name, have_status) VALUES($1, $2)`,
             [item_name, true]
         )
-    }
+
+    }*/
+
+});
+
+app.post("/storePantryListinDB", (req,res) => {
+    let sql_query;
+    let pantryItems = req.body;
+    let username = req.query.username;
+    //username = "kieran";
+    
+    //check to see if the username has a pantry already
+    sql_query = `SELECT * FROM pantry WHERE username=$1`;
+    pool.query(sql_query, [username])
+    .then((result) => {
+        if (result.rows.length > 0)
+        {
+            //get the previous stored JSON of pantry items
+            //should only be one JSON for each user
+            let previousPantryItems = result.rows[0].item_name.items;
+            pantryItems.items = pantryItems.items + ' ' + previousPantryItems;
+
+            //update if the user has an existing pantry list
+            console.log(pantryItems);
+            console.log(username);
+            sql_query = `UPDATE pantry SET item_name=$1 WHERE username=$2`;
+            pool.query(sql_query, [pantryItems, username])
+            .then((result) => {
+                res.json(result);
+            });
+        }
+        else
+        {   
+            //insert if the user does not have a pantry list
+            sql_query = `INSERT INTO pantry(username, item_name, have_status) VALUES ($1, $2, $3)`;
+
+            pool.query(sql_query, [username, pantryItems, true])
+            .then((result) => {
+                res.json(result);
+            });
+        }
+    });
 });
 
 app.get("/viewpantrylist", (req,res) => {
@@ -265,12 +352,14 @@ app.get("/shopping", (req,res) => {
 
 app.post("/saverecipe", (req,res) => {
     console.log(req.body.recipe.label);
+    let username = req.query.username;
+    console.log(username);
     let recipe_json = req.body.recipe;
     let folder_name = req.body.folder_name;
     console.log(folder_name);
     let rating = -1;
-    let q_str = `INSERT INTO recipebook(recipe_info,folder_name, rating) VALUES ($1, $2, $3)`;
-    pool.query(q_str, [recipe_json, folder_name, rating]);
+    let q_str = `INSERT INTO recipebook(username, recipe_info,folder_name, rating) VALUES ($1, $2, $3, $4)`;
+    pool.query(q_str, [username, recipe_json, folder_name, rating]);
 });
 
 app.get("/saved", (req,res) => {
