@@ -3,216 +3,92 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            Recipe Book
-        </title>
+        <title>Munch n' Lax</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
 
         <style>
-
+            body{
+                padding-top: 65px;
+                
+            }
         </style>
-	  <link rel="stylesheet" type="text/css" href="style.css">
     </head>
 
     <body>
-
         <nav>
+      
             <a href = "./home.html">Home</a>
-            <a href = "./rec.html">Get Recommendations</a>
-            <a href = "./pantry.html">Pantry</a>
-            <a href = "./shopping.html">Shopping List</a>
-            <a href = "./recipebook.html">Recipe Book</a>
+                <a href = "./rec.html">Get Recommendations</a>
+                <a href = "./pantry.html">Pantry</a>
+                <a href = "./shopping.html">Shopping List</a>
+                <a href = "./recipebook.html">Recipe Book</a>
+            
         </nav>
-
-	<div id="main"> 
-	<h1 class="page-title" id = "page-title"><strong id="name"></strong>'s Pantry</h1>
-        <button id="show-btn">
-            Show Saved Recipes
-        </button>
-
-        <button id="delete-entry">
-            Delete Recipe
-        </button>
-
+        
         <div>
-            askjdnakjsndkjasndkjanskdjnasdnaksndkasjndasd<span id="dots">...</span>
-            <span id="more">i express to you my condolences for your tragic loss. i can't begin
-                to imagine the immense pain u=you must feel. i want you to know that 
-                i'm here if you need anything. Anything at all, you just call me.
-            </span>
             
+            <select name="myFolders" id="myFolders">
+                <option value="">Please select a folder</option>
+                <option value="To Be Cooked">To Be Cooked</option>
+                <option value="Liked">Liked</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Party Recipes">Party Recipes</option>
+                <option value="Easy & Simple">Easy & Simple</option>
+                <option value="If I Have the Time and Willpower">If I Have the Time and Willpower</option>
+                <option value="Family Cooking">Family Cooking</option>
+                <option value="Guilty Pleasures">Guilty Pleasures</option>
+    
+               
+            </select>
         </div>
-        <button id="read"> 
-            Read More
-        </button>
-        <div>
-            To Be Cooked
-            <button id="toggle">See more</button>
-            <ul id="recipe">
+        
 
-            </ul>
+        <button id="view-folders">View Recipe Folders</button>
 
-        </div>
+       
+        <div id="add-delete">
+            
+            <label for="target-folder">Add or Delete a Folder Name:</label>
+            <input type="text" id="target-folder" name="target-folder" />
 
-        <div>
-            Liked
-            <button id="toggle_liked">See more</button>
-            <ul id="recipe_liked">
-
-            </ul>
-
+            <button id="add-folder">Add a Folder</button>
+            <button id="delete-folder">Delete a Folder</button>
+           
         </div>
 
-	<div class="footer">
-  		<p>Sujoy Bose, Avery Deemer, Kevin Hang, Chris Li, Adam Sao - 2022</p>
-	</div>
-
-	</div>
-        <script>
-	    let name = document.getElementById("name");
-        let username = '';
-        fetch("/home")
-            .then((response) => {
-                return response.text();
-            }).then((body) => {
-                if (body == "Error") {
-                    window.location.href = "login.html";
-                } else {
-                    username = body;
-                    name.textContent = username;
-                }
-        });
-            let recipe_ul = document.getElementById("recipe");
-            let show_btn = document.getElementById("show-btn");
-            let delete_btn = document.getElementById("delete-entry");
-            let see_btn = document.getElementById("toggle");
-            let see_liked_btn = document.getElementById("toggle_liked");
-            let liked_ul = document.getElementById("recipe_liked");
-            
-
-            let dots = document.getElementById("dots");
-            let more = document.getElementById("more");
-            let read_btn = document.getElementById("read");
-            more.style.display = "none";
-
-            read_btn.addEventListener("click", () => {
-                console.log(dots.style.display);
-                if (dots.style.display === "none")
-                {
-                    console.log("if");
-                    dots.style.display = "inline";
-                    read_btn.textContent = "Read More";
-                    more.style.display = "none"
-            
-                    
-                }
-                else
-                {
-                    console.log("else");
-                    dots.style.display = "none";
-                    read_btn.textContent = "Read Less";
-                    more.style.display = "inline"
-                    
-                    
-                }
-
-
-
-                    
-            });
-            show_btn.addEventListener("click", () => {
-                fetch("/saved")
-                .then((response) => {
-                    response.json()
-                    .then((body) => {
-                        //recipe_ul.style.display = "none";
-                        //liked_ul.style.display = "none"
-                        //console.log(body.rows.length);
-                        //console.log(body.rows[3].id);
-                        for (let i = 0; i < body.rows.length; i++)
-                        {
-                            console.log(body.rows[i].recipe_info.label);
-                            if (body.rows[i].folder_name === "To Be Cooked")
-                            {
-                                let li = document.createElement("li");
-                                recipe.append(li);
-                                li.textContent = body.rows[i].recipe_info.label;
-                                console.log(li.textContent);
-                                let cb = document.createElement("input");
-                                li.append(cb);
-                                cb.type = "checkbox";
-                                cb.name = "delete-cb";
-                                cb.value = body.rows[i].id;
-                            }
-                            
-                        }
-                        
-                        for (let i = 0; i < body.rows.length; i++)
-                        {
-                            //console.log(body.rows[i].recipe.label);
-                            if (body.rows[i].folder_name === "Liked")
-                            {
-                                let li = document.createElement("li");
-                                liked_ul.append(li);
-                                li.textContent = body.rows[i].recipe_info.label;
-                                console.log(li.textContent);
-                                let cb = document.createElement("input");
-                                li.append(cb);
-                                cb.type = "checkbox";
-                                cb.name = "delete-cb";
-                                cb.value = body.rows[i].id;
-                            }
-                            
-                        }
-                    });
-            });
-
-            
-            });
-
-            delete_btn.addEventListener("click", () => {
-                let cb = document.getElementsByName("delete-cb");
-                let q_str = ``;
-                for (let i = 0; i < cb.length ; i++)
-                {
-                    if (cb[i].checked)
-                    {
-                        q_str += `${cb[i].value},`;
-                    }
-                }
-                console.log(q_str);
-                fetch(`/delete?q=${q_str}`, { method: 'DELETE'})
-                .then((response) => {
-                    response.text()
-                    .then((body) => {
-                        //console.log(body);
-                    });
-                });
-            });
-            
-            see_btn.addEventListener("click", () => {
-                //console.log()
-                if (recipe_ul.style.display === "none")
-                {
-                    recipe_ul.style.display = "inline";
-                }
-                else
-                {
-                    recipe_ul.style.display = "none";
-                }
+        <table id="data-table" style="text-align: center"> 
+            <thead>
+                <tr style="background: #80c8e0; font-size: 24px; box-shadow: 0 0 1.5px 0 black;">
+                    <td style="font-weight: bold; color: white;">
+                        Recipe Name
+                    </td>
+                    <td style="font-weight: bold; color: white;">
+                        Ingredients
+                    </td>
+                    <td style="font-weight: bold; width: 300px; color: white;">
+                        Shopping List
+                    </td>
+                    <td style="font-weight: bold; color: white;">
+                        Calories
+                    </td>
                 
+                <td style="font-weight: bold; width: 300px; color: white;">
+                    Nutrition
+                </td>
+                </tr>
+            </thead>
+            <tbody id="tbody">
 
-            });
+            </tbody>
+        </table>
 
-            see_liked_btn.addEventListener("click", () => {
-                if (liked_ul.style.display === "none")
-                {
-                    liked_ul.style.display = "inline";
-                }
-                else
-                {
-                    liked_ul.style.display = "none";
-                }
-            });
-        </script>
+        
+
+        <script src="recipebookFunctions.js"></script>
+        <script src="recipebook.js"></script>
+
+
     </body>
 </html>

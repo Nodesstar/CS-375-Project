@@ -241,6 +241,7 @@ app.get("/viewpantrylist", (req,res) => {
         })
 });
 
+
 app.get("/shopping", (req,res) => {
     let item_cmp = req.query.compare.split(",");
 
@@ -305,6 +306,28 @@ app.delete("/delete", (req,res) => {
     
     
 });
+
+//get from recipebook table 
+app.get("/getRecipesForFolders", (req, res) => {
+    let username = req.query.username;
+    sql_query = `SELECT * FROM recipebook WHERE username=$1`;
+    pool.query(sql_query, [username])
+    .then((result) => {
+        res.json(result.rows);
+    });
+});
+
+//get from pantry
+app.get("/getPantryListinDB", (req,res) => {
+
+    let username = req.query.username;
+    sql_query = `SELECT * FROM pantry WHERE username=$1`;
+    pool.query(sql_query, [username])
+    .then((result) => {
+        res.json(result.rows);
+    });
+});
+
 
 app.listen(port, hostname, () => {
     console.log(`http://${hostname}:${port}`);
