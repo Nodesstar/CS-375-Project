@@ -21,6 +21,11 @@ CREATE TABLE ingredients(
     id SERIAL PRIMARY KEY,
     item_name TEXT
 );
+
+DELETE FROM pantry;
+DELETE FROM recipebook;
+DELETE FROM users;
+
 DELETE FROM ingredients;
 INSERT INTO ingredients (item_name) VALUES ('pork');
 INSERT INTO ingredients (item_name) VALUES ('lemon juice');
