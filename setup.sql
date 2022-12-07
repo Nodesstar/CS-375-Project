@@ -1,8 +1,11 @@
 CREATE DATABASE munchlaxatmidnight;
 \c munchlaxatmidnight;
+DROP TABLE pantry;
+DROP TABLE recipebook;
+DROP TABLE users;
 CREATE TABLE users (
     username VARCHAR(250) NOT NULL UNIQUE,
-    hashed_password CHAR(160)
+    hashed_password CHAR(60)
 );
 CREATE TABLE pantry (
 	id SERIAL PRIMARY KEY,
@@ -21,10 +24,6 @@ CREATE TABLE ingredients(
     id SERIAL PRIMARY KEY,
     item_name TEXT
 );
-
-DELETE FROM pantry;
-DELETE FROM recipebook;
-DELETE FROM users;
 
 DELETE FROM ingredients;
 INSERT INTO ingredients (item_name) VALUES ('pork');

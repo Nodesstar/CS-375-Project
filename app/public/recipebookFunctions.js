@@ -57,6 +57,7 @@ function displayRecipes(recipe_json, pantry_arr)
     td3.style.border = '1px solid black';
     let ul3 = document.createElement("ul");
     td3.append(ul3);
+    let count = 0;
     for (let i = 0; i < justTheIngredientsArr.length; i++)
     {
         if (!pantry_arr.includes(justTheIngredientsArr[i].food))
@@ -64,7 +65,16 @@ function displayRecipes(recipe_json, pantry_arr)
             let li = document.createElement("li");
             ul3.append(li);
             li.textContent = justTheIngredientsArr[i].food;
+            count += 1;
         }
+    }
+    console.log(calories, count);
+    if (count == 0) {
+        console.log("Got here");
+        let li = document.createElement("li");
+        li.textContent = "All ingredients in Pantry!";
+        li.style.color = "green";
+        ul3.append(li);
     }
 
     let td4 = document.createElement("td");

@@ -1,8 +1,23 @@
+let name = document.getElementById("name");
+        let user = '';
+        fetch("/home")
+            .then((response) => {
+                return response.text();
+            }).then((body) => {
+                if (body == "Error") {
+                    window.location.href = "login.html";
+                } else {
+                    user = body;
+                    name.textContent = user;
+                }
+        });
+
 let viewFoldersBtn = document.getElementById("view-folders");
 //let addFolderBtn = document.getElementById("add-folder");
 let deleteFolderBtn = document.getElementById("delete-folder");
 let folderInput = document.getElementById("myFolders");
 let addDeleteFolderInput = document.getElementById("target-folder");
+let error = document.getElementById("err");
 
 let username = '';
 fetch("/home")
@@ -18,6 +33,7 @@ fetch("/home")
         username = body;
         //name.textContent = username;
         viewFoldersBtn.addEventListener("click", () => {
+            error.textContent = "";
             clearScreen();
             fetch(`/getRecipesForFolders?username=${username}`)
             .then((response) => {
@@ -39,13 +55,17 @@ fetch("/home")
                                 let pantry_str = body2[0].item_name.items;
                                 let pantry_arr = pantry_str.split(",");
                                 
+                                let count = 0;
                                 for (let i = 0; i < body.length; i++)
                                 {
                                     if (body[i].folder_name === folderInput.value)
                                     {
                                         displayRecipes(body[i].recipe_info, pantry_arr);
+                                        count += 1;
                                     }
-                                    
+                                }
+                                if (count == 0) {
+                                    error.textContent = "No recipes in folder";
                                 }
                             }
                             
@@ -78,6 +98,7 @@ fetch("/home")
 // });
 
 deleteFolderBtn.addEventListener("click", () => {
+    error.textContent = "";
     
     console.log("deleteFolderusername", username);
     let store_recipe = ""

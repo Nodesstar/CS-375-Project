@@ -61,7 +61,6 @@
     </div>
 
     <div>
-        <button id="saverecipe-btn">Save to Recipe Book</button>
         <select name="folder-name" id="folder-name">
             <option value="">Please select a folder</option>
             <option value="To Be Cooked">To Be Cooked</option>
@@ -80,7 +79,7 @@
     </div>
 
     <div>
-        <button id="send" class="recipeButton">Recipe</button>
+        <button id="send" class="recipeButton">Find Recipes</button>
     </div>
 
     <div>
@@ -176,8 +175,8 @@
 	function comparePantryAndRecipe(recipe) {
 		let found = false;
 		for (let ingredient of recipe.recipe.ingredients) {
-			for (let pantryItem of pantryList) {
-				if (pantryItem.item_name === capitalizeFirstLetter(ingredient.food)) {
+			for (let pantryItem of pantryList[0].item_name.items.split(",")) {
+				if (pantryItem === ingredient.food) {
 					found = true;
 					break;
 				}
@@ -234,7 +233,7 @@
 	  });
 
 	  //AVERY 11/20/2022
-	  function func(ingredientFilter) {
+	  function func() {
 		let results = 0;
 
 		err.textContent = " ";
@@ -260,8 +259,9 @@
             console.log(recipes);
 
             for (let i = 0; i < rows; i++) {
-			if (!comparePantryAndRecipe(recipes[i]) && ingredientFilter) {
-				continue;
+			if (ingredientFilter.checked) {
+				if (!comparePantryAndRecipe(recipes[i])) 
+                    continue;
 			}
 			results += 1;
                   let tr = document.createElement('tr');
@@ -337,6 +337,7 @@
 
                             if (folder_name.value === "") {
                                 save_cb.style.backgroundColor = "pink";
+                                alert("Please select a folder to save recipe to.");
                             } else {
                                 save_cb.style.color = "green";
                                 save_cb.style.backgroundColor = "#E8E8E8";
@@ -393,16 +394,13 @@
 				err.textContent = data.err;
 			} else {
 				body = data;
-				if (ingredientFilter.checked)
-					func(true);
-				else
-					func(false);
+				func();
 			}
 		});
 	  });
 
 	let cb = document.getElementsByName("saverecipe");
-    let save_btn = document.getElementById("saverecipe-btn");
+    /*let save_btn = document.getElementById("saverecipe-btn");
 
       save_btn.addEventListener("click", () => {
 		for (let i = 0; i < cb.length; i++) {
@@ -438,15 +436,9 @@
 				});
 			}
 		}
-	});
+	});*/
 
-	ingredientFilter.addEventListener("click", () => {
-		if (ingredientFilter.checked)
-			func(true);
-		else
-			func(false);
-	});
-        
+    ingredientFilter.addEventListener("click", func);	
         
     </script>
 </body>

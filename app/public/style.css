@@ -1,6 +1,6 @@
 nav {
 	overflow: hidden;
-	text-align: left;
+	text-align: center;
 	background: #ADD8E6;
 	box-shadow: 0 0 5px 0 black;
 	position: fixed;
@@ -8,7 +8,7 @@ nav {
 	top: 0;
 	z-index: 10;
 	text-shadow: 0.5px 0.5px #224f5e;
-	padding-left: 280px;
+	/*padding-left: 280px;*/
 }
 
 nav a {
@@ -60,7 +60,7 @@ tr:nth-of-type(odd) {
 
 tr:nth-of-type(even) button {
 	background: #d2d5d6;
-	color: #d7eef5;
+	color: white;
 }
 
 .page-title {
@@ -129,4 +129,6 @@ button:hover, select:hover, input:hover {
 
 .recipeButton {
 	width: 500px;
+	background: #ADD8E6;
+	color: white;
 }
