@@ -4,7 +4,11 @@ DROP TABLE pantry;
 DROP TABLE recipebook;
 DROP TABLE users;
 CREATE TABLE users (
+<<<<<<< HEAD
     username VARCHAR(250) NOT NULL UNIQUE,
+=======
+    username VARCHAR(25),
+>>>>>>> ac342d8fa6bfce80c06a2b13e682ec256a316a00
     hashed_password CHAR(60)
 );
 CREATE TABLE pantry (
